@@ -107,7 +107,7 @@
     }
     
     
-    self.navigationController.navigationBar.tintColor = COLOR(2, 100, 162);
+    self.navigationController.navigationBar.tintColor = COLOR(247, 247, 247);
 	[self.view setBackgroundColor:COLOR(234,237,250)];
     if (self.isCancelButton) {
         UIBarButtonItem *cancelItem=[[UIBarButtonItem alloc]initWithTitle:@"取消" style:UIBarButtonItemStylePlain target:self action:@selector(cencel)];
