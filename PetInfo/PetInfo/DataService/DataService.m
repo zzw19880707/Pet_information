@@ -7,6 +7,7 @@
 //
 
 #import "DataService.h"
+
 @implementation DataService
 + (ASIHTTPRequest *)requestWithURL:(NSString *)urlstring andparams:(NSMutableDictionary *)params andhttpMethod: (NSString *)httpMethod completeBlock:(RequestFinishBlock) block{
     
@@ -19,7 +20,6 @@
     if (compGET==NSOrderedSame) {//相同
         //用于做拼接字符串
         NSMutableString *paramsString =[NSMutableString string];
-        urlstring =[urlstring stringByAppendingString:@"?"];
         NSArray *allKey=[params allKeys];
         for (int i=0; i<params.count; i++) {
             NSString *key=[allKey objectAtIndex:i];
@@ -29,18 +29,24 @@
                 [paramsString appendString:@"&"];
             }
         }
+        //判断它是不是大于0 大于0就可以拼接
+        if (paramsString.length > 0) {
+            urlstring = [urlstring stringByAppendingFormat:@"?%@",paramsString];
+        }
     }
     
         //设置请求url地址
         NSURL *url=[NSURL URLWithString:urlstring];
         __block ASIFormDataRequest *request=[ASIFormDataRequest requestWithURL:url];
-        
         //设置超时时间
         [request setTimeOutSeconds:60];
         //设置请求方法
         [request setRequestMethod:httpMethod];
         NSComparisonResult compPost =[httpMethod caseInsensitiveCompare:@"POST"];//忽略大小写比较。返回值是枚举类型的升序、降序、相同
         //处理post请求的参数
+    //处理POST请求方式
+    //如果httpMethod = post 写的时候要忽略大小写
+    //返回的是枚举
         if (compPost==NSOrderedSame) {//相同
             NSArray *allKey=[params allKeys];
             for (int i=0; i<params.count; i++) {
@@ -73,10 +79,10 @@
         }
         if (block !=nil) {
             block(result);
-        }
+        }        
     }];
     [request startAsynchronous];
-        return  request;
-    }
 
+    return  request;
+}
 @end
