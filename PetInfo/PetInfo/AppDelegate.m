@@ -28,6 +28,8 @@
     MainViewController *main=[[MainViewController alloc]init];
     self.window.rootViewController=main;
     [main release];
+    [self.window makeKeyAndVisible];
+
     //设置百度推送代理
     [BPush setupChannel:launchOptions];
     [BPush setDelegate:self];
@@ -40,18 +42,18 @@
      | UIRemoteNotificationTypeSound];
     
     
-    [self.window makeKeyAndVisible];
 
     return YES;
 }
 //注册token
 -(void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken{
     [BPush registerDeviceToken: deviceToken];
+
     _po(deviceToken);
 #warning <#message#>
 }
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
-    NSLog(@"Receive Notify: %@", [userInfo JSONString]);
+//    NSLog(@"Receive Notify: %@", [userInfo JSONString]);
     NSString *alert = [[userInfo objectForKey:@"aps"] objectForKey:@"alert"];
     if (application.applicationState == UIApplicationStateActive) {
         // Nothing to do if applicationState is Inactive, the iOS already displayed an alert view.
@@ -65,8 +67,7 @@
     [application setApplicationIconBadgeNumber:0];
     
     [BPush handleNotification:userInfo];
-    
-//    self.viewController.textView.text = [self.viewController.textView.text stringByAppendingFormat:@"Receive notification:\n%@", [userInfo JSONString]];
+
 }
 - (void)applicationWillResignActive:(UIApplication *)application
 {
@@ -106,31 +107,31 @@
     NSLog(@"On method:%@", method);
     NSLog(@"data:%@", [data description]);
     NSDictionary* res = [[NSDictionary alloc] initWithDictionary:data];
-    if ([BPushRequestMethod_Bind isEqualToString:method]) {
+    if ([BPushRequestMethod_Bind isEqualToString:method]) {//绑定
         NSString *appid = [res valueForKey:BPushRequestAppIdKey];
         NSString *userid = [res valueForKey:BPushRequestUserIdKey];
         NSString *channelid = [res valueForKey:BPushRequestChannelIdKey];
-        NSString *requestid = [res valueForKey:BPushRequestRequestIdKey];
         int returnCode = [[res valueForKey:BPushRequestErrorCodeKey] intValue];
-        
         if (returnCode == BPushErrorCode_Success) {
-//            self.viewController.appidText.text = appid;
-//            self.viewController.useridText.text = userid;
-//            self.viewController.channelidText.text = channelid;
+            NSUserDefaults *user=[NSUserDefaults standardUserDefaults];
+            [user setValue:appid forKey:BPushappid];
+            [user setValue:userid forKey:BPushuserid];
+            [user setValue:channelid forKey:BPushchannelid];
+            //同步
+            [user synchronize];
             
-            // 在内存中备份，以便短时间内进入可以看到这些值，而不需要重新bind
-//            self.appId = appid;
-//            self.channelId = channelid;
-//            self.userId = userid;
         }
-    } else if ([BPushRequestMethod_Unbind isEqualToString:method]) {
+    } else if ([BPushRequestMethod_Unbind isEqualToString:method]) {//解除绑定
         int returnCode = [[res valueForKey:BPushRequestErrorCodeKey] intValue];
         if (returnCode == BPushErrorCode_Success) {
-//            self.viewController.appidText.text = nil;
-//            self.viewController.useridText.text = nil;
-//            self.viewController.channelidText.text = nil;
+            NSUserDefaults *user=[NSUserDefaults standardUserDefaults];
+            [user removeObjectForKey:BPushchannelid];
+            [user removeObjectForKey:BPushuserid];
+            [user removeObjectForKey:BPushappid];
+            //同步
+            [user synchronize];
         }
     }
-//    self.viewController.textView.text = [[NSString alloc] initWithFormat: @"%@ return: \n%@", method, [data description]];
+
 }
 @end

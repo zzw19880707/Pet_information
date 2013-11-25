@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MainViewController : UITabBarController
+@interface MainViewController : UITabBarController{
+    UIView *_tabbarView;//tabbar
+    UIImageView *_sliderView;//滑动器
+}
 
 @end
