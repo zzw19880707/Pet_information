@@ -7,7 +7,6 @@
 //
 
 #import "DataService.h"
-#define BASE_URL @"192.168.1.135:8080/luntan/"
 @implementation DataService
 + (ASIHTTPRequest *)requestWithURL:(NSString *)urlstring andparams:(NSMutableDictionary *)params andhttpMethod: (NSString *)httpMethod completeBlock:(RequestFinishBlock) block{
     
