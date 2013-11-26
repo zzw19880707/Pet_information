@@ -107,24 +107,19 @@
         [BPush bindChannel];
         [userDefaults setBool:YES forKey:isFirstLogin];
     }
+    self.view.backgroundColor=PetBackgroundColor;
 
     //初始化子控制器
     [self _initController];
     [self _initTabbarView];
-//    _sliderView.frame= CGRectMake(152.5, 44, 15, 44);
-//    {{152.5, 5}, {15, 44}};
 
-    
-    
 }
 #pragma mark 按钮事件
 -(void)selectedTab:(UIButton *)button {
-    //    NSLog(@"tag--->%d",button.tag);
-    
     button.selected=YES;
     if (self.selectedIndex !=(button.tag-100)) {
         //设置选中的按钮----->未选中状态
-        UIButton *bu = (UIButton *)[_tabbarView viewWithTag:(self.selectedIndex+100)];
+        UIButton *bu = (UIButton *)VIEWWITHTAG(_tabbarView, (self.selectedIndex+100));
         [bu setSelected:NO];
         //设置当前字体颜色
         UILabel *label = (UILabel *)VIEWWITHTAG(_tabbarView, (self.selectedIndex+110));
