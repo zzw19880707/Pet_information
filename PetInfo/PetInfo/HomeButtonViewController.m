@@ -24,6 +24,7 @@
             case kDiseaseType://常见病
                 self.title=@"常见病";
             case kNearType://附近
+                
                 self.title=@"附近";
         }
     }
