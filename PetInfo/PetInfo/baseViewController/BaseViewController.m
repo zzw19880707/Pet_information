@@ -107,8 +107,8 @@
     }
     
     
-    self.navigationController.navigationBar.tintColor = COLOR(247, 247, 247);
-	[self.view setBackgroundColor:COLOR(234,237,250)];
+    self.navigationController.navigationBar.tintColor = PetBackgroundColor;
+	[self.view setBackgroundColor:PetBackgroundColor];
     if (self.isCancelButton) {
         UIBarButtonItem *cancelItem=[[UIBarButtonItem alloc]initWithTitle:@"取消" style:UIBarButtonItemStylePlain target:self action:@selector(cencel)];
         self.navigationItem.leftBarButtonItem=[cancelItem autorelease];
@@ -134,10 +134,11 @@
     [super setTitle:title];
     
     UILabel *titlelabel=[[UILabel alloc]initWithFrame:CGRectZero];
-    titlelabel.textColor=[UIColor blackColor];
+//    titlelabel.textColor=[UIColor blackColor];
     titlelabel.font=[UIFont boldSystemFontOfSize:18.0f];
-    titlelabel.backgroundColor=[UIColor clearColor];
+    titlelabel.backgroundColor= PetBackgroundColor;
     titlelabel.text=title;
+    titlelabel.textColor=PetTextColor;
     [titlelabel sizeToFit];
     self.navigationItem.titleView = [titlelabel autorelease];
 }

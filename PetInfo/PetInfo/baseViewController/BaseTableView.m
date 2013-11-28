@@ -52,7 +52,8 @@
     _refreshHeader=refreshHeader;
     if(_refreshHeader){
         [self addSubview:_refreshHeaderView];
-
+#warning 修改 待定
+        [_refreshHeaderView release];
     }else{
         if([_refreshHeaderView superclass]){
             [_refreshHeaderView removeFromSuperview];

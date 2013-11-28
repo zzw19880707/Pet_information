@@ -11,6 +11,12 @@
 
 #pragma mark UserDefaults
 #define isFirstLogin @"isFirstLogin"
+#define BPushchannelid @"BPushchannelid"
+#define BPushappid @"BPushappid"
+#define BPushuserid @"BPushuserid"
 
 
+#pragma mark Pet_Color
+#define PetTextColor COLOR(88, 195, 241)
+#define PetBackgroundColor COLOR(247, 247, 247)
 #endif

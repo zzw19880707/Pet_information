@@ -36,12 +36,17 @@
         
         [self addSubview:imageView];
         //设置背景条
-        UIView *titleBack = [[UIView alloc]initWithFrame:CGRectMake(0, self.frame.size.height-30, 320, 30)];
+#pragma mark 修改back宽度
+        UIView *titleBack = [[UIView alloc]initWithFrame:CGRectMake(0, self.frame.size.height-70, 150, 60)];
         titleBack.backgroundColor =[UIColor blackColor];
-        titleBack.alpha=0.6;[self addSubview:titleBack];
+#pragma mark 修改透明度        
+        titleBack.alpha=0.3;[self addSubview:titleBack];
         //设置标题文字
-        UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, self.frame.size.height-30, 320, 30)];
+#pragma mark 修改labl宽度
+        UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, self.frame.size.height-70, 150, 60)];
         titleLabel.text=titleStr;
+#pragma mark 自定义label
+        titleLabel.numberOfLines=3;
         titleLabel.backgroundColor =[UIColor clearColor];
         titleLabel.textColor=[UIColor whiteColor];
         [self addSubview:titleLabel];

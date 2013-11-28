@@ -109,4 +109,10 @@
     //调用委托实现方法
     [self.vDelegate buttonClick:vid];
 }
+
+#pragma mark 内存管理
+-(void)dealloc{
+    MARK;
+    [super dealloc];
+}
 @end

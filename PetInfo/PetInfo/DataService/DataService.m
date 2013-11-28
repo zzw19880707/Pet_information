@@ -68,6 +68,7 @@
      这样导致循环retain。
 
  */
+    _po(url);
     [request setCompletionBlock:^{
         NSData *data = request.responseData;
         float version = WXHLOSVersion();

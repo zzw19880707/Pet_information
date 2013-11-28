@@ -18,7 +18,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+        self.title=@"医院";
     }
     return self;
 }
@@ -29,10 +29,14 @@
     // Do any additional setup after loading the view from its nib.
 }
 
+#pragma mark 内存管理
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+-(void)dealloc{
+    [super dealloc];
 }
 
 @end

@@ -29,3 +29,10 @@
 #import "kPetInfo.h"
 //导入url地址和接口
 #import "BaseURL+Implements.h"
+
+//home页按钮
+typedef enum kHomeTableViewCellType{
+    kMedicineType=0,
+    kNearType=1,
+    kDiseaseType=2
+}kHomeTableViewCellType ;

@@ -8,8 +8,7 @@
 
 #import "BaseViewController.h"
 #import "AOScrollerView.h"
-#import "EGORefreshTableHeaderView.h"
-@interface HomeViewController : BaseViewController <EGORefreshTableHeaderDelegate,ValueClickDelegate,UITableViewDelegate,UITableViewDataSource> {
+@interface HomeViewController : BaseViewController <ValueClickDelegate,UITableViewDelegate,UITableViewDataSource> {
     __block NSArray *_array;
     //tableview数据源
     NSArray *_cellData;

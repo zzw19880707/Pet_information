@@ -9,6 +9,8 @@
 #import "HomeViewController.h"
 #import "DataService.h"
 #import "UIButton+WebCache.h"
+#import "HomeButtonViewController.h"
+
 @interface HomeViewController ()
 
 @end
@@ -92,8 +94,8 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    static NSString *cellIndentifier=@"everyCell";
-    UITableViewCell *cell=[tableView dequeueReusableCellWithIdentifier:cellIndentifier];
+    static NSString *homecellIndentifier=@"everyCell";
+    UITableViewCell *cell=[tableView dequeueReusableCellWithIdentifier:homecellIndentifier];
     
     if (cell==nil) {
         cell = [[[[NSBundle mainBundle]loadNibNamed:@"EveryCell" owner:self options:nil] lastObject]autorelease];
@@ -101,7 +103,6 @@
     UILabel *textLabel=(UILabel *)[cell.contentView viewWithTag:1011];
     UILabel *countLabel=(UILabel *)[cell.contentView viewWithTag:1013];
     UIButton *imageBtn=(UIButton *)[cell.contentView viewWithTag:1012];
-#warning 图片
     [imageBtn setImageWithURL:[NSURL URLWithString:@"http://ww1.sinaimg.cn/large/53e0c4edjw1dy3qf6n17xj.jpg"]];
 //    imageBtn.tag=1020+indexPath.row;
     [imageBtn addTarget:self action:@selector(imageButtonAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -115,45 +116,29 @@
     NSLog(@"%d",vid);
 }
 
-#pragma mark 内存管理
-- (void)dealloc {
-    [_scrollView release];
-    _scrollView=nil;
-    [_tableView release];
 
-    [_label release];
-    [super dealloc];
-}
-- (void)viewDidUnload {
-    [self.scrollView release];
-    self.scrollView=nil;
-    [self setTableView:nil];
-    [self setLabel:nil];
-    [super viewDidUnload];
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    
-}
 #pragma mark 按钮事件
 - (IBAction)btnAction:(UIButton *)sender {
+    HomeButtonViewController *homeButtonVC=[[[HomeButtonViewController alloc]init] autorelease];
+
     switch (sender.tag) {
         case 1001:
-            _pn(123);
+            homeButtonVC.homeType=kMedicineType;
+            //宠物药品
+            [self.navigationController pushViewController:homeButtonVC animated:YES];
             break;
         case 1002:
-            _pn(456);
-
+            //常见病
+            homeButtonVC.homeType=kDiseaseType;
+            [self.navigationController pushViewController:homeButtonVC animated:YES];
             break;
         case 1003:
-            _pn(789);
-
+            //晒靓照
             break;
         case 1004:
-            _pn(123);
-
+            //附近
+            homeButtonVC.homeType=kNearType;
+            [self.navigationController pushViewController:homeButtonVC animated:YES];
             break;
             
         default:
@@ -201,5 +186,28 @@
         [_fullImageView removeFromSuperview];
     }];
     [UIApplication sharedApplication].statusBarHidden = NO;
+}
+
+
+
+#pragma mark 内存管理
+- (void)dealloc {
+    [_scrollView release];
+    _scrollView=nil;
+    [_tableView release];
+    
+    [_label release];
+    [super dealloc];
+}
+- (void)viewDidUnload {
+    [self.scrollView release];
+    self.scrollView=nil;
+    [self setTableView:nil];
+    [self setLabel:nil];
+    [super viewDidUnload];
+}
+- (void)didReceiveMemoryWarning{
+    [super didReceiveMemoryWarning];
+    
 }
 @end
