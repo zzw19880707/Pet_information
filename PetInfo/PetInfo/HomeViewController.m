@@ -10,6 +10,7 @@
 #import "DataService.h"
 #import "UIButton+WebCache.h"
 #import "HomeButtonViewController.h"
+#import "BaseNavViewController.h"
 
 @interface HomeViewController ()
 
@@ -33,8 +34,17 @@
     self.scrollView.frame=CGRectMake(0, 0, ScreenWidth, ScreenHeight-10-44-44-15-10);
     self.scrollView.backgroundColor=PetBackgroundColor;
     self.scrollView.contentSize=CGSizeMake(ScreenWidth, 120+60+60+30);
+    //添加分享按钮
+    UIButton *shareButton = [[UIButton alloc]init];
+    shareButton.backgroundColor=PetBackgroundColor;
+    shareButton.frame=CGRectMake(0, 0, 30, 30);
+    [shareButton setImage:[UIImage imageNamed:@"navagitionbar_share.png"] forState:UIControlStateNormal];
+    [shareButton addTarget:self action:@selector(backAction) forControlEvents:UIControlEventTouchUpInside];
+
+    UIBarButtonItem *shareitem = [[UIBarButtonItem alloc]initWithCustomView:shareButton];
+    self.navigationItem.rightBarButtonItem= [shareitem autorelease];
     
-    
+
     [self _initAOView];
     if ([_cellData count]==0) {
         [self.tableView setHidden:YES];
@@ -59,6 +69,7 @@
     [ASVBGImage release];
 //    //加载网络，获取图片地址和title
     [DataService requestWithURL:GetAOImg andparams:nil andhttpMethod:@"GET" completeBlock:^(id result) {
+        _po(result);
         _array=[result objectForKey:@"data"];
         for (int i = 0; i<_array.count; i++) {
             NSDictionary *dic=_array[i];
@@ -118,18 +129,36 @@
 
 
 #pragma mark 按钮事件
+-(void)shareAction{
+#warning 判断是否登陆？如果登陆可以分享，如果未登陆，则提示登陆后才能分享
+    
+    if(0){
+        UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"提示" message:@"请先登陆，再发布分享！" delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+        [alert show];
+        [alert release];
+    }else{
+//        SendViewController *send=[[SendViewController alloc]init];
+//        BaseNavViewController *nav=[[BaseNavViewController alloc]initWithRootViewController:send];
+//        [self.navigationController presentViewController:nav animated:YES completion:^{
+//        
+//        }];
+    }
+    
+}
 - (IBAction)btnAction:(UIButton *)sender {
     HomeButtonViewController *homeButtonVC=[[[HomeButtonViewController alloc]init] autorelease];
-
+//    homeButtonVC.isBackButton=YES;
     switch (sender.tag) {
         case 1001:
             homeButtonVC.homeType=kMedicineType;
+            homeButtonVC.titleText=@"宠物药品";
             //宠物药品
             [self.navigationController pushViewController:homeButtonVC animated:YES];
             break;
         case 1002:
             //常见病
             homeButtonVC.homeType=kDiseaseType;
+            homeButtonVC.titleText=@"常见病";
             [self.navigationController pushViewController:homeButtonVC animated:YES];
             break;
         case 1003:
@@ -137,6 +166,7 @@
             break;
         case 1004:
             //附近
+            homeButtonVC.titleText=@"附近";
             homeButtonVC.homeType=kNearType;
             [self.navigationController pushViewController:homeButtonVC animated:YES];
             break;

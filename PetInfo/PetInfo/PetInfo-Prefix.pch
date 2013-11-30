@@ -32,7 +32,12 @@
 
 //home页按钮
 typedef enum kHomeTableViewCellType{
-    kMedicineType=0,
-    kNearType=1,
-    kDiseaseType=2
+    //提纲页面
+    kMedicineType=0,//药品
+    kNearType=1,//附近
+    kDiseaseType=2,//常见病
+    //列表
+    kDetailMedicineType=3,//药品列表
+    kDetailNearType=5,//附近列表
+    kDetailDiseaseType=4//常见病列表
 }kHomeTableViewCellType ;

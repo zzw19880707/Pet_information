@@ -26,10 +26,24 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    _data=@[@[],@[],@[@"提点意见",@"打个分，鼓励一下"],@[@"用户协议",@"关于我们"]];
-    _section=@[@"个人信息",@"宠物信息",@"意见反馈",@"泡宠信息"];
 }
 -(void)viewWillAppear:(BOOL)animated{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString *username = [userDefaults stringForKey:@"username"];
+    NSArray *petArray = [userDefaults arrayForKey:@"pet"];
+    if ([username isEqualToString:@""] ||username ==NULL) {
+        username = @"登陆";
+        petArray = @[@"尚未登陆"];
+    }else {
+        if ([petArray  count] == 0) {
+            petArray = @[@"无"];
+        }
+        
+    }
+    _data=@[@[username],petArray,@[@"提点意见",@"打个分，鼓励一下"],@[@"用户协议",@"关于我们"]] ;
+    _data = [_data retain];
+    _section=@[@"个人信息",@"宠物信息",@"意见反馈",@"泡宠信息"];
+    _section = [_section retain];
     [self.tableView  reloadData];
     [super viewWillAppear:animated];
 }
@@ -63,42 +77,29 @@
     if (cell == nil) {
         cell = [[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndentifier]autorelease];
     }
-    
-    if (indexPath.section==0&&indexPath.row==0) {
-        NSString *username=[[NSUserDefaults standardUserDefaults] stringForKey:@"username"];
-        if([username isEqualToString:@""]||username==NULL){
-            cell.textLabel.text=@"登陆";
+    cell.textLabel.text = _data[indexPath.section][indexPath.row];
+    if (indexPath.section==0) {
+        if (![cell.textLabel.text isEqualToString:@"登陆"]) {
             cell.textLabel.textColor=PetTextColor;
         }else{
             cell.textLabel.textColor=[UIColor grayColor];
-            cell.textLabel.text=username;
         }
-        cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
-    }else if(indexPath.section==2){
-        if (indexPath.row==0) {
-            cell.textLabel.text=@"提点意见";
-        }else{
-            cell.textLabel.text=@"打个分，鼓励一下";
-        }
-    }else if(indexPath.section==3){
-        if (indexPath.row==0) {
-            cell.textLabel.text=@"用户协议";
+    }else if(indexPath.section==1&&indexPath.row==0){
+        if ([cell.textLabel.text isEqualToString:@"尚未登陆"]) {
             
         }else{
-            cell.textLabel.text=@"关于我们";
-            
+            UIButton *button=[[UIButton  alloc]initWithFrame:CGRectMake(240, 7, 30, 30)];
+            [button setImage:[UIImage imageNamed:@"more_pet_add"] forState:UIControlStateNormal];
+            [button addTarget:self action:@selector(addPet) forControlEvents:UIControlEventTouchUpInside];
+            [cell.contentView addSubview:button];
+            [button release];
         }
-        cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
-    }else{//宠物信息
-        
-        UIButton *button=[[UIButton  alloc]initWithFrame:CGRectMake(260, 7, 30, 30)];
-        [button setImage:[UIImage imageNamed:@"more_pet_add"] forState:UIControlStateNormal];
-        [button addTarget:self action:@selector(addPet) forControlEvents:UIControlEventTouchUpInside];
-        [cell.contentView addSubview:button];
-        [button release];
         
     }
+ 
+
     cell.selectionStyle=UITableViewCellSelectionStyleNone;
+    cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
 
     
     return cell;
@@ -110,6 +111,12 @@
     if (indexPath.section==0&&indexPath.row==0) {
         LoginViewController *login=[[LoginViewController alloc]init];
         [self.navigationController pushViewController:login animated:YES];
+    }else if(indexPath.section == 1){
+        if ([_data[indexPath.section][0]isEqualToString:@"尚未登陆"]) {
+#warning 
+        }else {
+            
+        }
     }
     [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
 

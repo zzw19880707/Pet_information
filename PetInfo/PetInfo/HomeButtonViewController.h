@@ -10,9 +10,9 @@
 
 @interface HomeButtonViewController : BaseViewController<UITableViewDelegate,UITableViewDataSource>
 {
-    NSData *_data;
+    NSArray *_data;
 }
 @property (assign,nonatomic) kHomeTableViewCellType homeType;
 @property (retain, nonatomic) IBOutlet UITableView *tableView;
-
+@property (assign,nonatomic) NSString *titleText;
 @end

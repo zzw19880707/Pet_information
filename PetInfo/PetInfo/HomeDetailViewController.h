@@ -8,6 +8,9 @@
 
 #import "BaseViewController.h"
 
-@interface HomeDetailViewController : BaseViewController
+@interface HomeDetailViewController : BaseViewController<UITableViewDelegate,UITableViewDataSource>{
+    NSArray *_data;
+}
+@property (retain, nonatomic) IBOutlet UITableView *tabelView;
 
 @end

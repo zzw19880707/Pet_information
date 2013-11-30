@@ -9,5 +9,6 @@
 #import "BaseViewController.h"
 
 @interface HospitalViewController : BaseViewController
+- (IBAction)test:(id)sender;
 
 @end

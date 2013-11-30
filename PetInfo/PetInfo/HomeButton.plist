@@ -3,39 +3,30 @@
 <plist version="1.0">
 <dict>
 	<key>Disease</key>
-	<dict>
-		<key>0</key>
+	<array>
 		<string>狗</string>
-		<key>1</key>
 		<string>猫</string>
-	</dict>
+	</array>
 	<key>Medicine</key>
-	<dict>
-		<key>0</key>
+	<array>
 		<string>皮肤病药品</string>
-		<key>1</key>
 		<string>抗菌消炎药</string>
-		<key>2</key>
 		<string>耳眼口腔药</string>
-		<key>3</key>
 		<string>体内驱虫药</string>
-		<key>4</key>
 		<string>体外驱虫药</string>
-		<key>5</key>
 		<string>疫苗注射类</string>
-		<key>6</key>
 		<string>肠胃类药品</string>
-		<key>7</key>
 		<string>心肝肾药品</string>
-		<key>8</key>
 		<string>传染病药品</string>
-		<key>9</key>
 		<string>常规药品类</string>
-	</dict>
+	</array>
 	<key>near</key>
-	<dict>
-		<key>New item</key>
-		<string></string>
-	</dict>
+	<array>
+		<string>主人</string>
+		<string>宠物</string>
+		<string>商家</string>
+		<string>医院</string>
+		<string>club</string>
+	</array>
 </dict>
 </plist>

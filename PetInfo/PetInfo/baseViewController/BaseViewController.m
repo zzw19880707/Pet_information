@@ -96,28 +96,39 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    NSArray *viewControllers = self.navigationController.viewControllers;
-    if (viewControllers.count > 1 && self.isBackButton) {
-        UIButton *button = [[UIButton alloc]init];
-        button.frame = CGRectMake(0, 0, 24, 24);
-        button.showsTouchWhenHighlighted = YES;
-        [button addTarget:self action:@selector(backAction) forControlEvents:UIControlEventTouchUpInside];
-        UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithCustomView:button];
-        self.navigationItem.leftBarButtonItem = [backItem autorelease];
-    }
-    
-    
+    //设置navegation背景颜色
     self.navigationController.navigationBar.tintColor = PetBackgroundColor;
 	[self.view setBackgroundColor:PetBackgroundColor];
+
+
+    NSArray *viewControllers = self.navigationController.viewControllers;
+    
+    
+        
     if (self.isCancelButton) {
         UIBarButtonItem *cancelItem=[[UIBarButtonItem alloc]initWithTitle:@"取消" style:UIBarButtonItemStylePlain target:self action:@selector(cencel)];
         self.navigationItem.leftBarButtonItem=[cancelItem autorelease];
+    }else{
+        if (viewControllers.count > 1 ) {
+            UIButton *button = [[UIButton alloc]init];
+            button.backgroundColor = PetBackgroundColor;
+            //        [button setTitle:@"返回" forState:UIControlStateNormal];
+            [button setImage:[UIImage imageNamed:@"navagiton_back.png"] forState:UIControlStateNormal];
+            button.frame = CGRectMake(0, 0, 40, 30);
+            //        button.showsTouchWhenHighlighted = YES;
+            [button addTarget:self action:@selector(backAction) forControlEvents:UIControlEventTouchUpInside];
+            UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithCustomView:button];
+            self.navigationItem.leftBarButtonItem = [backItem autorelease];
+        }
     }
 
 }
 #pragma mark ----按钮事件
 -(void)cencel{
     [self dismissViewControllerAnimated:YES completion:NULL];
+}
+-(void)backAction{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark ----内存管理

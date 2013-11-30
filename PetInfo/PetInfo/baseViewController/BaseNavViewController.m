@@ -73,7 +73,7 @@
     return poppedController;
 }
 
-
+//返回手势
 -(void)swipeGestureAction:(UISwipeGestureRecognizer *)gesture{
     if ([self.viewControllers count]>1) {
         if(gesture.direction==UISwipeGestureRecognizerDirectionRight){

@@ -8,6 +8,10 @@
 
 #import "BaseViewController.h"
 
-@interface MoreViewController : BaseViewController
+@interface MoreViewController : BaseViewController < UITableViewDataSource,UITableViewDelegate>{
+    NSArray *_data;
+    NSArray *_section;
+}
+@property (retain, nonatomic) IBOutlet UITableView *tableView;
 
 @end

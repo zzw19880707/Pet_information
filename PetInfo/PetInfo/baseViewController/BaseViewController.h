@@ -15,7 +15,7 @@
     
 }
 @property(nonatomic,retain)MBProgressHUD *hud;
-@property(nonatomic,assign)BOOL isBackButton; //navigation 返回
+//@property(nonatomic,assign)BOOL isBackButton; //navigation 返回
 
 @property (nonatomic,assign)BOOL isCancelButton;//取消按钮
 -(AppDelegate *)appDelegate;
