@@ -258,8 +258,8 @@
         [badLabel release];
         
         //作者
-        UILabel *authorLable =[[UILabel alloc]initWithFrame:CGRectMake(10, 10, 100, 15)];
-        authorLable.font=[UIFont systemFontOfSize:15];
+        UILabel *authorLable =[[UILabel alloc]initWithFrame:CGRectMake(10, 2, 100, 17)];
+        authorLable.font=[UIFont systemFontOfSize:17];
         authorLable.text = [_cellData[count] objectForKey:@"author"];
         authorLable.backgroundColor = CLEARCOLOR;
         authorLable.textColor = PetBackgroundColor;
