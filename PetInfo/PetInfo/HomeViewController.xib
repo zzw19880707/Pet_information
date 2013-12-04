@@ -48,6 +48,7 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{15, 251}, {290, 44}}</string>
 								<reference key="NSSuperview" ref="383554350"/>
+								<reference key="NSNextKeyView" ref="130270039"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
@@ -337,7 +338,7 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{120, 209}, {80, 19}}</string>
 								<reference key="NSSuperview" ref="383554350"/>
-								<reference key="NSNextKeyView" ref="130270039"/>
+								<reference key="NSNextKeyView" ref="385905149"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
@@ -499,6 +500,15 @@
 					</object>
 					<int key="connectionID">28</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchEventConnection" key="connection">
+						<string key="label">moreAction:</string>
+						<reference key="source" ref="159645461"/>
+						<reference key="destination" ref="372490531"/>
+						<int key="IBEventType">7</int>
+					</object>
+					<int key="connectionID">56</int>
+				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<array key="orderedObjects">
@@ -651,7 +661,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">55</int>
+			<int key="maxID">56</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes"/>
 		<int key="IBDocument.localizationMode">0</int>

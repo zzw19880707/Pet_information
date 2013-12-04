@@ -11,6 +11,8 @@
 #import "UIButton+WebCache.h"
 #import "HomeButtonViewController.h"
 #import "BaseNavViewController.h"
+#import "LoginViewController.h"
+#import "SendViewController.h"
 @interface HomeViewController ()
 
 @end
@@ -25,6 +27,16 @@
     }
     return self;
 }
+-(void)viewWillAppear:(BOOL)animated{
+    _user_id =[[NSUserDefaults standardUserDefaults]integerForKey:@"user_id"];
+    if (_fullImageView!=NULL) {
+        [_fullImageView setHidden: NO];
+        [self performSelector:@selector(hidden) withObject:nil afterDelay:0.1];
+    }
+}
+-(void)hidden{
+    [UIApplication sharedApplication].statusBarHidden=YES;
+}
 
 - (void)viewDidLoad
 {
@@ -37,7 +49,7 @@
     shareButton.backgroundColor=PetBackgroundColor;
     shareButton.frame=CGRectMake(0, 0, 30, 30);
     [shareButton setImage:[UIImage imageNamed:@"navagitionbar_share.png"] forState:UIControlStateNormal];
-    [shareButton addTarget:self action:@selector(backAction) forControlEvents:UIControlEventTouchUpInside];
+    [shareButton addTarget:self action:@selector(shareAction) forControlEvents:UIControlEventTouchUpInside];
     
     UIBarButtonItem *shareitem = [[UIBarButtonItem alloc]initWithCustomView:shareButton];
     self.navigationItem.rightBarButtonItem= [shareitem autorelease];
@@ -60,8 +72,17 @@
     ASVBGImage.image=[UIImage imageNamed:@"ao_background.png"];
     [ASVBGView addSubview:ASVBGImage];
     [ASVBGImage release];
-    //    //加载网络，获取图片地址和title
-    [DataService requestWithURL:GetAOImg andparams:nil andhttpMethod:@"GET" completeBlock:^(id result) {
+    
+    NSMutableDictionary *params;
+    [self Location];
+    if (_user_id ==0) {
+        params =nil;
+    }else{
+        
+        params=[NSMutableDictionary dictionaryWithObjects:@[[NSNumber numberWithInteger:_user_id]] forKeys:@[@"user_id"]];
+    }
+    //加载网络，获取图片地址和title
+    [DataService requestWithURL:GetAOImg andparams:params andhttpMethod:@"GET" completeBlock:^(id result) {
         //获取滚动条数据
         _array=[result objectForKey:@"data"];
         for (int i = 0; i<_array.count; i++) {
@@ -142,19 +163,14 @@
 
 #pragma mark 按钮事件
 -(void)shareAction{
-#warning 判断是否登陆？如果登陆可以分享，如果未登陆，则提示登陆后才能分享
-    
-    if(0){
-        UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"提示" message:@"请先登陆，再发布分享！" delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
-        [alert show];
-        [alert release];
-    }else{
-        //        SendViewController *send=[[SendViewController alloc]init];
-        //        BaseNavViewController *nav=[[BaseNavViewController alloc]initWithRootViewController:send];
-        //        [self.navigationController presentViewController:nav animated:YES completion:^{
-        //
-        //        }];
-    }
+//    if(_user_id==0){
+//        [self alertLoginView];
+//    }else{
+        SendViewController *send=[[SendViewController alloc]init];
+        send.isCancelButton=YES;
+        BaseNavViewController *nav=[[BaseNavViewController alloc]initWithRootViewController:send];
+        [self.navigationController presentViewController:nav animated:YES completion:NULL];
+//    }
     
 }
 - (IBAction)btnAction:(UIButton *)sender {
@@ -191,7 +207,9 @@
 
 //图片按钮点击变大
 -(void)imageButtonAction:(UIButton *)button{
+    //点击的cell 位置
     int count = button.tag -1020;
+    
     UIImage *imageFull = button.imageView.image;
     if (_fullImageView == NULL) {
         _fullImageView = [[UIImageView alloc]init];
@@ -199,6 +217,21 @@
         _fullImageView.backgroundColor=PetBackgroundColor;
         _fullImageView.userInteractionEnabled=YES;//使view获取交互响应
         _fullImageView.contentMode = UIViewContentModeScaleAspectFit;//填充模式
+        
+        //返回view
+        UIView *backView =[[UIView alloc]initWithFrame:CGRectMake(0, 0, ScreenWidth, 44)];
+        backView.backgroundColor =[UIColor blackColor];
+        backView.alpha=0.3;
+        backView.tag=1023;
+        //返回按钮
+        UIButton *backButton =[[UIButton alloc]initWithFrame:CGRectMake(20, (44-30)/2, 40, 30)];
+        [backButton setImage:[UIImage imageNamed:@"home_btn_gray.png"] forState:UIControlStateNormal];
+        [backButton addTarget:self action:@selector(backAction) forControlEvents:UIControlEventTouchUpInside];
+        [backView addSubview:backButton];
+        [backButton release];
+        [_fullImageView addSubview:backView];
+        [backView release];
+        [backView setHidden:YES];
         //添加手势
         //向右返回
         UISwipeGestureRecognizer *swipRightGesture =[[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(scaleImageAction:)];
@@ -225,8 +258,14 @@
         //点赞按钮
         UIButton *goodButton =[[UIButton alloc]init];
         goodButton.frame=CGRectMake(320-40-10, 10, 40, 40);
+        //tag = 1000 +0(0:good ,1:bad)
+        goodButton.tag=1000 +0;
         [goodButton setImage:[UIImage imageNamed:@"home_good.png"] forState:UIControlStateNormal];
         [goodButton setImage:[UIImage imageNamed:@"home_good_highlighted.png"] forState:UIControlStateSelected];
+        //已经选中
+        if ([[_cellData[count] objectForKey:@"good_flag"] intValue]>0) {
+            goodButton.selected =YES;
+        }
         [goodButton addTarget:self action:@selector(GoodBadAction:) forControlEvents:UIControlEventTouchUpInside];
         
         //点赞label
@@ -241,8 +280,14 @@
         //鄙视按钮
         UIButton *badButton= [[UIButton alloc]init];
         badButton.frame=CGRectMake(320-40-10,goodLabel.bottom+10, 40, 40);
+        badButton.tag =1000 + 1;
         [badButton setImage:[UIImage imageNamed:@"home_bad.png"] forState:UIControlStateNormal];
         [badButton setImage:[UIImage imageNamed:@"home_bad_highlighted.png"] forState:UIControlStateSelected];
+        //已经选中
+
+        if ([[_cellData[count] objectForKey:@"bad_flag"] intValue]>0) {
+            badButton.selected =YES;
+        }
         [badButton addTarget:self action:@selector(GoodBadAction:) forControlEvents:UIControlEventTouchUpInside];
         [descView addSubview:goodButton];
         [descView addSubview:badButton];
@@ -262,7 +307,7 @@
         authorLable.font=[UIFont systemFontOfSize:17];
         authorLable.text = [_cellData[count] objectForKey:@"author"];
         authorLable.backgroundColor = CLEARCOLOR;
-        authorLable.textColor = PetBackgroundColor;
+        authorLable.textColor = [UIColor whiteColor];
         [descView addSubview:authorLable];
         [authorLable release];
         //描述
@@ -272,6 +317,7 @@
         descLabel.numberOfLines =0;
         descLabel.font=[UIFont systemFontOfSize:15];
         descLabel.text = [_cellData[count] objectForKey:@"desc"];
+        descLabel.textColor= [UIColor whiteColor];
         CGSize size=[descLabel.text sizeWithFont:descLabel.font constrainedToSize:CGSizeMake(ScreenWidth-50, 1000)];//适配高度
         descLabel.frame =CGRectMake(0, 0, ScreenWidth-50, size.height);
         descLabel.tag = 1034;
@@ -303,39 +349,161 @@
         _fullImageView.frame=CGRectMake(0, 0, ScreenWidth, ScreenHeight);
     } completion:^(BOOL finished) {
         [UIApplication sharedApplication].statusBarHidden=YES;
+        [[_fullImageView viewWithTag:1023]setHidden:NO];
+        [[_fullImageView viewWithTag:1024]setHidden:NO];
+
     }];
     [self.view.window addSubview:_fullImageView];
     
 }
+//返回按钮事件
+-(void)backAction{
+    [self shrinkView];
+}
+
 //点赞按钮事件
 -(void)GoodBadAction:(UIButton *)button{
-    button.selected = !button.selected;
+    if (_user_id ==0) {
+        [self alertLoginView];
+        return;
+    }
+    UIView *backView =[_fullImageView viewWithTag:1024];
+    
+    UILabel *goodLabel = (UILabel *)[backView viewWithTag:1033];
+    UILabel *badLabel = (UILabel *)[backView viewWithTag:1034];
+    NSString *key ,*value;
+    //tag = 1000 + 0(0:good ,1:bad)
+    if (button.selected) {
+        button.selected = NO;//取消选中
+        if ((button.tag -1000)%10 ==0) {//good
+            int n =[goodLabel.text intValue];
+            goodLabel.text = [NSString stringWithFormat:@"%d",n-1 ];
+            key=@"good";
+            
+        }else{
+            int n =[badLabel.text intValue];
+            badLabel.text =[NSString stringWithFormat:@"%d",n-1 ];
+            key=@"bad";
+        }
+        value =@"sub";
+    }else {
+        button.selected = YES;
+        if ((button.tag -1000)%10 ==0) {//good
+            int n =[goodLabel.text intValue];
+            goodLabel.text = [NSString stringWithFormat:@"%d",n+1 ];
+            key=@"good";
+        }else{
+            int n =[badLabel.text intValue];
+            badLabel.text =[NSString stringWithFormat:@"%d",n+1 ];
+            key=@"bad";
+        }
+        value=@"add";
+    }
+    NSMutableDictionary *params = [[NSMutableDictionary alloc]initWithCapacity:2];
+    [params setDictionary:@{@"key": key,@"value":value}];
+    [DataService  requestWithURL:VoteServlet andparams:params andhttpMethod:@"GET" completeBlock:^(id result) {
+        
+    }];
+    
 }
 //全屏后缩小图片
 - (void)scaleImageAction:(UISwipeGestureRecognizer *)gesture {
     if(gesture.direction==UISwipeGestureRecognizerDirectionRight){
-        [UIView animateWithDuration:0.2 animations:^{
-            _fullImageView.frame = _frame;
-        } completion:^(BOOL finished) {
-            [_fullImageView removeFromSuperview];
-        }];
-        [UIApplication sharedApplication].statusBarHidden = NO;
+
+        [self shrinkView];
     }else if(gesture.direction==UISwipeGestureRecognizerDirectionDown){
         UIView *view =[_fullImageView viewWithTag:1024];
+        UIView *backView =[_fullImageView viewWithTag:1023];
         if (!view.hidden) {
-            [view setHidden:YES];
+            [UIView animateWithDuration:0.5 animations:^{
+                view.transform =CGAffineTransformTranslate(view.transform, 0, 130);
+                backView.transform =CGAffineTransformTranslate(backView.transform, 0, -44);
+            } completion:^(BOOL finished) {
+                [view setHidden:YES];
+                [backView setHidden:YES];
+            }];
+            
         }
     }else if(gesture.direction==UISwipeGestureRecognizerDirectionUp){
         UIView *view =[_fullImageView viewWithTag:1024];
+        UIView *backView =[_fullImageView viewWithTag:1023];
         if (view.hidden) {
-            [view setHidden:NO];
+            [UIView animateWithDuration:.5 animations:^{
+                [view setHidden:NO];
+                [backView setHidden:NO];   
+                backView.transform=CGAffineTransformIdentity;
+                view.transform=CGAffineTransformIdentity;
+            }];
+
         }
     }
 
 }
+//更多按钮
+- (IBAction)moreAction:(id)sender {
+    
+}
+#pragma mark 方法
+//定位
+-(void)Location {
+    CLLocationManager *locationManager = [[CLLocationManager alloc] init];
+    locationManager.delegate = self;
+    //精度10米
+    [locationManager setDesiredAccuracy:kCLLocationAccuracyNearestTenMeters];
+    [locationManager startUpdatingLocation];
+}
+//缩小视图 方法
+-(void)shrinkView {
+    [UIApplication sharedApplication].statusBarHidden=NO;
+    [UIView animateWithDuration:0.2 animations:^{
+        _fullImageView.frame = _frame;
+        [[_fullImageView viewWithTag:1023]setHidden:YES];
+        [[_fullImageView viewWithTag:1024]setHidden:YES];
+    } completion:^(BOOL finished) {
+        [_fullImageView removeFromSuperview];
+        RELEASE_SAFELY(_fullImageView);
+    }];
+}
 
+-(void)alertLoginView {
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"你尚未登录，是否登陆？" delegate:self cancelButtonTitle:@"否"  otherButtonTitles:@"是", nil];
+    [alert show];
+    [alert release];
+}
+#pragma mark UIAlertViewDelegate
+- (void)alertView:(UIAlertView *)alertView willDismissWithButtonIndex:(NSInteger)buttonIndex{
+    if (buttonIndex ==1) {
+        LoginViewController *view =[[LoginViewController alloc]init] ;
+        view.isCancelButton =YES;
+        if (_fullImageView!=NULL) {
+            [_fullImageView setHidden:YES];
+            [UIApplication sharedApplication].statusBarHidden=NO;
+        }
+        [self presentModalViewController:[[BaseNavViewController alloc]initWithRootViewController:view] animated:YES];
+        [view release];
+    }
+    
+}
+#pragma mark - CLLocationManager delegate
+- (void)locationManager:(CLLocationManager *)manager
+	didUpdateToLocation:(CLLocation *)newLocation
+		   fromLocation:(CLLocation *)oldLocation {
+    
+    [manager stopUpdatingLocation];
+    
+    _longtitude = newLocation.coordinate.longitude;
+    _latitude = newLocation.coordinate.latitude;
+    NSMutableDictionary *params;
+    if (_user_id >0) {
+        params =[NSMutableDictionary dictionaryWithObjects:@[[NSNumber numberWithFloat:_longtitude],[NSNumber numberWithFloat:_latitude]] forKeys:@[@"longtitude",@"latitude"]];
+    }else{
+        params=nil;
+    }
+    [DataService requestWithURL:HomeLogin andparams:params andhttpMethod:@"GET" completeBlock:^(id result) {
+        
+    }];
 
-
+}
 #pragma mark 内存管理
 - (void)dealloc {
     [_scrollView release];
@@ -356,4 +524,5 @@
     [super didReceiveMemoryWarning];
     
 }
+
 @end
