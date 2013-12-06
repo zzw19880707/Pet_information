@@ -56,7 +56,6 @@
                 id value=[params objectForKey:key];
                 //判断是否是文件上传
                 if ([value isKindOfClass:[NSData class]]) {
-//                    [request addData:value forKey:key];
                     [request addData:value withFileName:@"test.png" andContentType:@"image/png" forKey:@"image"];
                 }else{
                     [request addPostValue:value forKey:key];
