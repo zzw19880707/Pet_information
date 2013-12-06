@@ -44,6 +44,8 @@
     
     [DataService requestWithURL:@"test" andparams:nil andhttpMethod:@"POST" completeBlock:^(id result) {
         
+    }andErrorBlock:^(NSError *error) {
+        
     }];
 }
 @end

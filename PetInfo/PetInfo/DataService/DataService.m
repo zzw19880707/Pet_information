@@ -10,7 +10,7 @@
 
 @implementation DataService
 //发送异步请求
-+ (ASIHTTPRequest *)requestWithURL:(NSString *)urlstring andparams:(NSMutableDictionary *)params andhttpMethod: (NSString *)httpMethod completeBlock:(RequestFinishBlock) block{
++ (ASIHTTPRequest *)requestWithURL:(NSString *)urlstring andparams:(NSMutableDictionary *)params andhttpMethod: (NSString *)httpMethod completeBlock:(RequestFinishBlock) block andErrorBlock:(RequestErrorBlock) errorBlock{
     
     //拼接url地址
     urlstring = [BASE_URL stringByAppendingString:urlstring];
@@ -82,6 +82,13 @@
         if (block !=nil) {
             block(result);
         }        
+    }];
+    
+    [request setFailedBlock:^{
+        NSError *error = [request error];
+        if(errorBlock !=nil){
+            errorBlock(error);
+        }
     }];
     [request startAsynchronous];
 

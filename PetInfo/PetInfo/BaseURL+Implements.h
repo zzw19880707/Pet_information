@@ -9,8 +9,11 @@
 #ifndef PetInfo_BaseURL_Implements_h
 #define PetInfo_BaseURL_Implements_h
 
-#define BASE_URL @"http://192.168.1.135:8080/luntan/"
-
+#define BASE_URL @"http://192.168.1.135:8080/petInfo/"
+//#define BASE_URL @"http://192.168.1.102:8080/petInfo/"
 #pragma mark HomeViewController
 #define GetAOImg @"AoServlet"
+#define HomeLogin @"HomeLogin"
+#define VoteServlet @"VoteServlet"
+
 #endif

@@ -106,8 +106,17 @@
     
         
     if (self.isCancelButton) {
-        UIBarButtonItem *cancelItem=[[UIBarButtonItem alloc]initWithTitle:@"取消" style:UIBarButtonItemStylePlain target:self action:@selector(cencel)];
-        self.navigationItem.leftBarButtonItem=[cancelItem autorelease];
+//        UIBarButtonItem *cancelItem=[[UIBarButtonItem alloc]initWithTitle:@"取消" style:UIBarButtonItemStylePlain target:self action:@selector(cencel)];
+//        self.navigationItem.leftBarButtonItem=[cancelItem autorelease];
+        UIButton *button = [[UIButton alloc]init];
+        button.backgroundColor = PetBackgroundColor;
+        //        [button setTitle:@"返回" forState:UIControlStateNormal];
+        [button setImage:[UIImage imageNamed:@"navagiton_back.png"] forState:UIControlStateNormal];
+        button.frame = CGRectMake(0, 0, 40, 30);
+        //        button.showsTouchWhenHighlighted = YES;
+        [button addTarget:self action:@selector(cencel) forControlEvents:UIControlEventTouchUpInside];
+        UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithCustomView:button];
+        self.navigationItem.leftBarButtonItem = [backItem autorelease];
     }else{
         if (viewControllers.count > 1 ) {
             UIButton *button = [[UIButton alloc]init];

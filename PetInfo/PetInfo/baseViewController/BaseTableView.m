@@ -25,7 +25,7 @@
 }
 -(void)_initView{
     
-    _refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.bounds.size.height, self.frame.size.width, self.bounds.size.height)];
+    _refreshHeaderView = [[EGORefreshTableHeaderView_old alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.bounds.size.height, self.frame.size.width, self.bounds.size.height)];
     _refreshHeaderView.delegate = self;
     _refreshHeaderView.backgroundColor=[UIColor clearColor];
     self.dataSource=self;
@@ -168,7 +168,7 @@
 #pragma mark -
 #pragma mark EGORefreshTableHeaderDelegate Methods
 //下拉到一定距离，手指放开时调用
-- (void)egoRefreshTableHeaderDidTriggerRefresh:(EGORefreshTableHeaderView*)view{
+- (void)egoRefreshTableHeaderDidTriggerRefresh:(EGORefreshTableHeaderView_old*)view{
     //设置为正在加载的状态
 	[self reloadTableViewDataSource];
     
@@ -181,13 +181,13 @@
     
 }
 //当前是否加载
-- (BOOL)egoRefreshTableHeaderDataSourceIsLoading:(EGORefreshTableHeaderView*)view{
+- (BOOL)egoRefreshTableHeaderDataSourceIsLoading:(EGORefreshTableHeaderView_old*)view{
 	
 	return _reloading; 	
 }
 
 //取得下拉刷新的时间
-- (NSDate*)egoRefreshTableHeaderDataSourceLastUpdated:(EGORefreshTableHeaderView*)view{
+- (NSDate*)egoRefreshTableHeaderDataSourceLastUpdated:(EGORefreshTableHeaderView_old*)view{
 	
 	return [NSDate date]; 
 	

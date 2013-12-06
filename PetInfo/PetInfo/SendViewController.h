@@ -7,7 +7,20 @@
 //
 
 #import "BaseViewController.h"
+#import <CoreLocation/CoreLocation.h>
 
-@interface SendViewController : BaseViewController
+@interface SendViewController : BaseViewController<CLLocationManagerDelegate> {
+    //经纬度
+    float _longtitude;
+    float _latitude;
+    UIImageView *_fullImageView;
 
+}
+@property (retain, nonatomic) IBOutlet UITextView *textView;
+@property (retain, nonatomic) IBOutlet UIView *editorBar;
+
+@property (retain,nonatomic) UIButton *imageButton;
+
+//senddata
+@property (retain,nonatomic) UIImage *sendImage;
 @end

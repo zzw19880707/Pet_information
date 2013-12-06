@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "EGORefreshTableHeaderView.h"
+#import "EGORefreshTableHeaderView_old.h"
 
 @class BaseTableView;
 @protocol UItableviewEventDelegate <NSObject>
@@ -22,7 +22,7 @@
 @end
 
 @interface BaseTableView : UITableView <EGORefreshTableHeaderDelegate,UITableViewDataSource,UITableViewDelegate >{
-    EGORefreshTableHeaderView *_refreshHeaderView;
+    EGORefreshTableHeaderView_old *_refreshHeaderView;
 //
     BOOL _reloading;
     

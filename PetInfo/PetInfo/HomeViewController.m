@@ -13,6 +13,9 @@
 #import "BaseNavViewController.h"
 #import "LoginViewController.h"
 #import "SendViewController.h"
+#import "ImageWallModel.h"
+
+#import "BasePhotoViewController.h"
 @interface HomeViewController ()
 
 @end
@@ -56,7 +59,7 @@
     
     
     [self _initAOView];
-    
+
 }
 
 //初始化AOScroller
@@ -88,25 +91,31 @@
         for (int i = 0; i<_array.count; i++) {
             NSDictionary *dic=_array[i];
             [arr addObject:[dic objectForKey:@"imageurl"]];
-            [strArr addObject:[NSString stringWithFormat:@"  【%@】\n%@\n%@",[dic objectForKey:@"category"],[dic objectForKey:@"titile"],[dic objectForKey:@"content"]]];
+            [strArr addObject:[NSString stringWithFormat:@"  【%@】\n%@\n%@",[dic objectForKey:@"category"],[dic objectForKey:@"title"],[dic objectForKey:@"content"]]];
         }
         
-        //获取tablevie数据
-        NSDictionary *celldic = [result objectForKey:@"celldata"];
-        NSMutableArray *arrya = [[NSMutableArray alloc]initWithCapacity:10];
-        for (int i=0; i<celldic.count; i++) {
-            NSDictionary *dic = [celldic objectForKey:[NSString stringWithFormat:@"%d",i+1]];
-            [arrya  addObject:dic];
+        NSArray *array =[result objectForKey:@"celldata"];
+//        self.cellData=[NSMutableArray arrayWithArray:array];
+//        if ([self.cellData count]==0) {
+//            [self.tableView setHidden:YES];
+//            [self.label setHidden:NO];
+//        }else{
+//            self.tableView.height=[self.cellData count]*80+10;
+//            [self.tableView reloadData];
+//        }
+        self.cellData =[[NSMutableArray alloc]init];
+        for (NSDictionary *dic in array) {
+            ImageWallModel *model = [[ImageWallModel alloc]initWithDataDic:dic];
+            [self.cellData addObject:model];
+            [model release];
         }
-        self.cellData=arrya;
-        if ([self.cellData count]==0) {
+        if (self.cellData.count ==0) {
             [self.tableView setHidden:YES];
             [self.label setHidden:NO];
-        }else{
-            self.tableView.height=[self.cellData count]*80+10;
-            [self.tableView reloadData];
+
         }
-        
+        self.tableView.height=[self.cellData count]*80+10;
+        [self.tableView reloadData];
         // 初始化自定义ScrollView类对象
         AOScrollerView *aSV = [[AOScrollerView alloc]initWithNameArr:arr titleArr:strArr height:119];
         //设置委托
@@ -115,6 +124,8 @@
         [ASVBGView addSubview:aSV];
         [aSV release];
         
+    } andErrorBlock:^(NSError *error) {
+#warning 错误信息
     }];
     [self.scrollView addSubview:ASVBGView];
     [ASVBGView release];
@@ -144,10 +155,11 @@
         cell = [[[[NSBundle mainBundle]loadNibNamed:@"EveryCell" owner:self options:nil] lastObject]autorelease];
     }
     UILabel *textLabel=(UILabel *)[cell.contentView viewWithTag:1011];
-    textLabel.text = [_cellData[indexPath.row] objectForKey: @"desc"];
+    ImageWallModel *model = _cellData[indexPath.row];
+    textLabel.text = model.des;
     UILabel *countLabel=(UILabel *)[cell.contentView viewWithTag:1013];
     UIButton *imageBtn=(UIButton *)[cell.contentView viewWithTag:1012];
-    [imageBtn setImageWithURL:[NSURL URLWithString: [_cellData[indexPath.row] objectForKey:@"path_min"]]];
+    [imageBtn setImageWithURL:[NSURL URLWithString: model.pathMin]];
     imageBtn.tag=1020+indexPath.row;
     [imageBtn addTarget:self action:@selector(imageButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     imageBtn.imageView.contentMode=UIViewContentModeScaleAspectFit;
@@ -191,6 +203,9 @@
             break;
         case 1003:
             //晒靓照
+            
+            [self.navigationController pushViewController:[[[BasePhotoViewController alloc]init]autorelease] animated:YES];
+
             break;
         case 1004:
             //附近
@@ -209,7 +224,7 @@
 -(void)imageButtonAction:(UIButton *)button{
     //点击的cell 位置
     int count = button.tag -1020;
-    
+    ImageWallModel *model =_cellData[count];
     UIImage *imageFull = button.imageView.image;
     if (_fullImageView == NULL) {
         _fullImageView = [[UIImageView alloc]init];
@@ -233,11 +248,12 @@
         [backView release];
         [backView setHidden:YES];
         //添加手势
-        //向右返回
-        UISwipeGestureRecognizer *swipRightGesture =[[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(scaleImageAction:)];
-        swipRightGesture.direction = UISwipeGestureRecognizerDirectionRight;
-        [_fullImageView addGestureRecognizer:swipRightGesture];
-        [swipRightGesture release];
+        //双击返回
+        UITapGestureRecognizer *tapGesture=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(shrinkAction:)];
+        tapGesture.numberOfTapsRequired=2;
+        [_fullImageView addGestureRecognizer:tapGesture];
+        [tapGesture release];
+
         //向上显示详细
         UISwipeGestureRecognizer *swipUpGesture =[[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(scaleImageAction:)];
         swipUpGesture.direction = UISwipeGestureRecognizerDirectionUp;
@@ -263,7 +279,7 @@
         [goodButton setImage:[UIImage imageNamed:@"home_good.png"] forState:UIControlStateNormal];
         [goodButton setImage:[UIImage imageNamed:@"home_good_highlighted.png"] forState:UIControlStateSelected];
         //已经选中
-        if ([[_cellData[count] objectForKey:@"good_flag"] intValue]>0) {
+        if ([model.goodFlag intValue]>0) {
             goodButton.selected =YES;
         }
         [goodButton addTarget:self action:@selector(GoodBadAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -271,7 +287,8 @@
         //点赞label
         UILabel *goodLabel = [[UILabel alloc ]initWithFrame:CGRectMake(320-40-10,  goodButton.bottom, 40, 10)];
         goodLabel.font =[UIFont systemFontOfSize:10];
-        goodLabel.text = [_cellData[count] objectForKey:@"good"];
+        ;
+        goodLabel.text = [NSString stringWithFormat:@"%@",model.good ];
         goodLabel.tag =1033;
         goodLabel.textAlignment =NSTextAlignmentCenter;
         goodLabel.backgroundColor= CLEARCOLOR;
@@ -284,8 +301,7 @@
         [badButton setImage:[UIImage imageNamed:@"home_bad.png"] forState:UIControlStateNormal];
         [badButton setImage:[UIImage imageNamed:@"home_bad_highlighted.png"] forState:UIControlStateSelected];
         //已经选中
-
-        if ([[_cellData[count] objectForKey:@"bad_flag"] intValue]>0) {
+        if ([model.badFlag intValue]>0) {
             badButton.selected =YES;
         }
         [badButton addTarget:self action:@selector(GoodBadAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -295,7 +311,7 @@
         [badButton release];
         UILabel *badLabel = [[UILabel alloc ]initWithFrame:CGRectMake(320-40-10, badButton.bottom, 40, 10)];
         badLabel.font =[UIFont systemFontOfSize:10];
-        badLabel.text = [_cellData[count] objectForKey:@"bad"];
+        badLabel.text = [NSString stringWithFormat:@"%@",model.bad];
         badLabel.tag = 1034;
         badLabel.textAlignment = NSTextAlignmentCenter;
         badLabel.backgroundColor = CLEARCOLOR;
@@ -305,7 +321,7 @@
         //作者
         UILabel *authorLable =[[UILabel alloc]initWithFrame:CGRectMake(10, 2, 100, 17)];
         authorLable.font=[UIFont systemFontOfSize:17];
-        authorLable.text = [_cellData[count] objectForKey:@"author"];
+        authorLable.text = model.author;
         authorLable.backgroundColor = CLEARCOLOR;
         authorLable.textColor = [UIColor whiteColor];
         [descView addSubview:authorLable];
@@ -316,7 +332,7 @@
         UILabel *descLabel =[[UILabel alloc]init];
         descLabel.numberOfLines =0;
         descLabel.font=[UIFont systemFontOfSize:15];
-        descLabel.text = [_cellData[count] objectForKey:@"desc"];
+        descLabel.text = model.des;
         descLabel.textColor= [UIColor whiteColor];
         CGSize size=[descLabel.text sizeWithFont:descLabel.font constrainedToSize:CGSizeMake(ScreenWidth-50, 1000)];//适配高度
         descLabel.frame =CGRectMake(0, 0, ScreenWidth-50, size.height);
@@ -403,14 +419,19 @@
     [params setDictionary:@{@"key": key,@"value":value}];
     [DataService  requestWithURL:VoteServlet andparams:params andhttpMethod:@"GET" completeBlock:^(id result) {
         
+    } andErrorBlock:^(NSError *error) {
+        
     }];
     
 }
 //全屏后缩小图片
+-(void)shrinkAction:(UITapGestureRecognizer *)tapGesture{
+    [self shrinkView];
+}
+//上下手势， 上 隐藏  下显示
 - (void)scaleImageAction:(UISwipeGestureRecognizer *)gesture {
     if(gesture.direction==UISwipeGestureRecognizerDirectionRight){
 
-        [self shrinkView];
     }else if(gesture.direction==UISwipeGestureRecognizerDirectionDown){
         UIView *view =[_fullImageView viewWithTag:1024];
         UIView *backView =[_fullImageView viewWithTag:1023];
@@ -441,8 +462,33 @@
 }
 //更多按钮
 - (IBAction)moreAction:(id)sender {
-    
+    NSMutableDictionary *params;
+    [self Location];
+    if (_user_id ==0) {
+        params =nil;
+    }else{
+        
+        params=[NSMutableDictionary dictionaryWithObjects:@[[NSNumber numberWithInteger:_user_id]] forKeys:@[@"user_id"]];
+    }
+    //加载网络，获取图片地址和title
+    [DataService requestWithURL:GetAOImg andparams:params andhttpMethod:@"GET" completeBlock:^(id result) {
+        NSMutableArray *array =[result objectForKey:@"celldata"];
+        [self.cellData addObjectsFromArray:array];
+
+//        self.cellData=[NSMutableArray arrayWithArray:array];
+//        if ([self.cellData count]==0) {
+//            [self.tableView setHidden:YES];
+//            [self.label setHidden:NO];
+//        }else{
+//            self.tableView.height=[self.cellData count]*80+10;
+//            [self.tableView reloadData];
+//        }
+
+    } andErrorBlock:^(NSError *error) {
+        
+    }];
 }
+
 #pragma mark 方法
 //定位
 -(void)Location {
@@ -501,6 +547,8 @@
     }
     [DataService requestWithURL:HomeLogin andparams:params andhttpMethod:@"GET" completeBlock:^(id result) {
         
+    } andErrorBlock:^(NSError *error) {
+        
     }];
 
 }
@@ -511,6 +559,7 @@
     [_tableView release];
     
     [_label release];
+    MARK;
     [super dealloc];
 }
 - (void)viewDidUnload {
