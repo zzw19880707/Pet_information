@@ -56,8 +56,8 @@
                 id value=[params objectForKey:key];
                 //判断是否是文件上传
                 if ([value isKindOfClass:[NSData class]]) {
-                    [request addData:value forKey:key];
-                    
+//                    [request addData:value forKey:key];
+                    [request addData:value withFileName:@"test.png" andContentType:@"image/png" forKey:@"image"];
                 }else{
                     [request addPostValue:value forKey:key];
                 }
@@ -88,92 +88,91 @@
 
     return  request;
 }
-//异步上传图片
-//+ (ASIHTTPRequest *)sendImageWithURL:(NSString *)urlstring andparams:(NSMutableDictionary *)params  completeBlock:(RequestFinishBlock) block{
-+ (ASIHTTPRequest *)sendImageWithURL:(NSString *)urlstring andparams:(NSMutableDictionary *)params  completeBlock:(RequestFinishBlock) block andErrorBlock:(RequestErrorBlock) errorBlock{
-    //拼接url地址
-    urlstring = [BASE_URL stringByAppendingString:urlstring];
-    //设置请求url地址
-    NSURL *url=[NSURL URLWithString:urlstring];
-    __block ASIFormDataRequest *request=[ASIFormDataRequest requestWithURL:url];
-    //设置超时时间
-    [request setTimeOutSeconds:60];
-    //设置请求方法
-    [request setRequestMethod:@"POST"];
-    
-    //分界线的标识符
-    NSString *TWITTERFON_FORM_BOUNDARY = @"1473780983146649988";
-    
-    //设置HTTPHeader中Content-Type的值
-    NSString *content=[[NSString alloc]initWithFormat:@"multipart/form-data;boundary=%@",TWITTERFON_FORM_BOUNDARY];
-    [request addRequestHeader:@"Content-Type" value:content];
-    //分界线 --AaB03x
-    NSString *MPboundary=[[NSString alloc]initWithFormat:@"\r\n--%@",TWITTERFON_FORM_BOUNDARY];
-    _po(MPboundary);
-    NSArray *allKey=[params allKeys];
-    //声明myRequestData，用来放入http body
-    NSMutableData *myRequestData=[NSMutableData data];
-    for (int i=0; i<params.count; i++) {
-        NSMutableString *body=[[NSMutableString alloc]init];
-        NSString *key=[allKey objectAtIndex:i];
-        id value=[params objectForKey:key];
-        _po([value class]);
-        //判断是否是文件上传
-        if ([value isKindOfClass:[NSData class]]) {
-            [body appendFormat:@"%@\r\n",MPboundary];
-            //声明pic字段，文件名为boris.png
-            [body appendFormat:@"Content-Disposition: form-data; name=\"userfiles\"; filename=\"upload.png\"\r\n"];
-            //声明上传文件的格式
-            [body appendFormat:@"Content-Type: image/png\r\n\r\n"];//png
-            //将body字符串转化为UTF8格式的二进制
-            [myRequestData appendData:[body dataUsingEncoding:NSUTF8StringEncoding]];
-
-            //将image的data加入
-            [myRequestData appendData:value];
-        }else{
-            //添加分界线，换行
-            [body appendFormat:@"%@\r\n",MPboundary];
-            //添加字段名称，换2行
-            [body appendFormat:@"Content-Disposition: form-data; name=\"%@\"\r\n\r\n",key];
-            //添加字段的值
-            [body appendFormat:@"%@\r\n",value];
-            //将body字符串转化为UTF8格式的二进制
-            [myRequestData appendData:[body dataUsingEncoding:NSUTF8StringEncoding]];
-        }
-        RELEASE_SAFELY(body)
-    }
-    //结束符 AaB03x--
-    NSString *endMPboundary=[[NSString alloc]initWithFormat:@"%@--",MPboundary];
-
-    //声明结束符：--AaB03x--
-    NSString *end=[[NSString alloc]initWithFormat:@"\r\n%@",endMPboundary];
-    //加入结束符--AaB03x--
-    [myRequestData appendData:[end dataUsingEncoding:NSUTF8StringEncoding]];
+////异步上传图片
+//+ (ASIHTTPRequest *)sendImageWithURL:(NSString *)urlstring andparams:(NSMutableDictionary *)params  completeBlock:(RequestFinishBlock) block andErrorBlock:(RequestErrorBlock) errorBlock{
+//    //拼接url地址
+//    urlstring = [BASE_URL stringByAppendingString:urlstring];
+//    //设置请求url地址
+//    NSURL *url=[NSURL URLWithString:urlstring];
+//    __block ASIFormDataRequest *request=[ASIFormDataRequest requestWithURL:url];
+//    //设置超时时间
+//    [request setTimeOutSeconds:60];
+//    //设置请求方法
+//    [request setRequestMethod:@"POST"];
+//    
+//    //分界线的标识符
+//    NSString *TWITTERFON_FORM_BOUNDARY = @"1473780983146649988";
+//    
+//    //设置HTTPHeader中Content-Type的值
+//    NSString *content=[[NSString alloc]initWithFormat:@"multipart/form-data;boundary=%@",TWITTERFON_FORM_BOUNDARY];
+//    [request addRequestHeader:@"Content-Type" value:content];
+//    //分界线 --AaB03x
+//    NSString *MPboundary=[[NSString alloc]initWithFormat:@"\r\n--%@",TWITTERFON_FORM_BOUNDARY];
+//    _po(MPboundary);
+//    NSArray *allKey=[params allKeys];
+//    //声明myRequestData，用来放入http body
+//    NSMutableData *myRequestData=[NSMutableData data];
+//    for (int i=0; i<params.count; i++) {
+//        NSMutableString *body=[[NSMutableString alloc]init];
+//        NSString *key=[allKey objectAtIndex:i];
+//        id value=[params objectForKey:key];
+//        _po([value class]);
+//        //判断是否是文件上传
+//        if ([value isKindOfClass:[NSData class]]) {
+//            [body appendFormat:@"%@\r\n",MPboundary];
+//            //声明pic字段，文件名为boris.png
+//            [body appendFormat:@"Content-Disposition: form-data; name=\"userfiles\"; filename=\"upload.png\"\r\n"];
+//            //声明上传文件的格式
+//            [body appendFormat:@"Content-Type: image/png\r\n\r\n"];//png
+//            //将body字符串转化为UTF8格式的二进制
+//            [myRequestData appendData:[body dataUsingEncoding:NSUTF8StringEncoding]];
+//
+//            //将image的data加入
+//            [myRequestData appendData:value];
+//        }else{
+//            //添加分界线，换行
+//            [body appendFormat:@"%@\r\n",MPboundary];
+//            //添加字段名称，换2行
+//            [body appendFormat:@"Content-Disposition: form-data; name=\"%@\"\r\n\r\n",key];
+//            //添加字段的值
+//            [body appendFormat:@"%@\r\n",value];
+//            //将body字符串转化为UTF8格式的二进制
+//            [myRequestData appendData:[body dataUsingEncoding:NSUTF8StringEncoding]];
+//        }
+//        RELEASE_SAFELY(body)
+//    }
+//    //结束符 AaB03x--
+//    NSString *endMPboundary=[[NSString alloc]initWithFormat:@"%@--",MPboundary];
+//
+//    //声明结束符：--AaB03x--
+//    NSString *end=[[NSString alloc]initWithFormat:@"\r\n%@",endMPboundary];
+//    //加入结束符--AaB03x--
+//    [myRequestData appendData:[end dataUsingEncoding:NSUTF8StringEncoding]];
 //    [request addRequestHeader:@"Content-Length" value:[NSString stringWithFormat:@"%d", [myRequestData length]]];
-    _pn([myRequestData length]);
-    _po(url);
-    
-    [request setCompletionBlock:^{
-        NSData *data = request.responseData;
-        float version = WXHLOSVersion();
-        id result = nil ;
-        if (version>=5.0) {
-            result =[NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-        }else {//版本定位5.0以上.
-            //            result=[data obj]
-        }
-        if (block !=nil) {
-            block(result);
-        }
-    }];
-    [request setFailedBlock:^{
-        NSError *error = [request error];
-        if(errorBlock !=nil){
-            errorBlock(error);
-        }
-    }];
-    [request startAsynchronous];
-    
-    return  request;
-}
+//    _pn([myRequestData length]);
+//    _po(url);
+//
+//    [request setCompletionBlock:^{
+//        NSData *data = request.responseData;
+//        float version = WXHLOSVersion();
+//        id result = nil ;
+//        if (version>=5.0) {
+//            result =[NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+//        }else {//版本定位5.0以上.
+//            //            result=[data obj]
+//        }
+//        if (block !=nil) {
+//            block(result);
+//        }
+//    }];
+//    [request setFailedBlock:^{
+//        NSError *error = [request error];
+//        if(errorBlock !=nil){
+//            errorBlock(error);
+//        }
+//    }];
+//    [request startAsynchronous];
+//    
+//    return  request;
+//}
 @end
