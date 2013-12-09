@@ -11,7 +11,7 @@
 
 @interface SendViewController : BaseViewController<CLLocationManagerDelegate> {
     //经纬度
-    float _longtitude;
+    float _longitude;
     float _latitude;
     UIImageView *_fullImageView;
 

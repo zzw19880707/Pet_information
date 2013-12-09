@@ -28,7 +28,7 @@
 {
     [super viewDidLoad];
     _latitude=0.0f;
-    _longtitude =0.0f;
+    _longitude =0.0f;
     [self _initView];
     UIButton *button = [[UIButton alloc]init];
     button.backgroundColor = PetTextColor;
@@ -104,10 +104,10 @@
     
     [params setValue:UIImagePNGRepresentation(self.sendImage) forKey:@"image"];
     [params setValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"user_id"] forKey:@"userId"];
-    if (_latitude ==0.0f&&_longtitude ==0.0f) {
+    if (_latitude ==0.0f&&_longitude ==0.0f) {
         
     }else{
-        [params setValue:[NSNumber numberWithFloat:_longtitude] forKey:@"longtitude"];
+        [params setValue:[NSNumber numberWithFloat:_longitude] forKey:@"longitude"];
         [params setValue:[NSNumber numberWithFloat:_latitude] forKey:@"latitude"];
     }
     [self showStaticTip:YES title:@"发送中.."];
@@ -206,7 +206,7 @@
     
     
     if (buttonIndex==0) {
-#warning 照片存放和喊话
+#warning 照片存放和汉化
         //判断是否有前置和后置摄像头
         BOOL isCamera =[UIImagePickerController isCameraDeviceAvailable:UIImagePickerControllerCameraDeviceFront];
         if (!isCamera) {
@@ -273,7 +273,7 @@
     
     [manager stopUpdatingLocation];
     
-    _longtitude = newLocation.coordinate.longitude;
+    _longitude = newLocation.coordinate.longitude;
     _latitude = newLocation.coordinate.latitude;
     
     
