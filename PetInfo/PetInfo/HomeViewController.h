@@ -8,12 +8,12 @@
 
 #import "BaseViewController.h"
 #import <CoreLocation/CoreLocation.h>
-
+#import "FullView.h"
 #import "AOScrollerView.h"
-@interface HomeViewController : BaseViewController <ValueClickDelegate,UITableViewDelegate,CLLocationManagerDelegate,UITableViewDataSource,UIAlertViewDelegate> {
+@interface HomeViewController : BaseViewController <ValueClickDelegate,UITableViewDelegate,CLLocationManagerDelegate,UITableViewDataSource,FullImageViewDelegate> {
     __block NSArray *_array;
 //图片最大化视图
-  UIImageView *_fullImageView;
+  FullView *_fullImageView;
 //按钮图片位置
     CGRect _frame;
     //登陆用户id 
