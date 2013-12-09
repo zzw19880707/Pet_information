@@ -19,6 +19,7 @@
     }
     return self;
 }
+#pragma mark init
 - (id)initWithModel:(ImageWallModel *)model andFrame:(CGRect)frame
 {
     self = [super init];
@@ -150,6 +151,7 @@
     }
     return self;
 }
+#pragma mark 按钮事件
 //全屏后缩小图片
 -(void)shrinkAction:(UITapGestureRecognizer *)tapGesture{
     [self shrinkView];
@@ -187,18 +189,6 @@
     
 }
 
-//缩小视图 方法
--(void)shrinkView {
-    [UIApplication sharedApplication].statusBarHidden=NO;
-    [UIView animateWithDuration:0.2 animations:^{
-        self.frame = _frame;
-        [[self viewWithTag:1023]setHidden:YES];
-        [[self viewWithTag:1024]setHidden:YES];
-    } completion:^(BOOL finished) {
-        [self removeFromSuperview];
-//        RELEASE_SAFELY(self);
-    }];
-}
 //返回按钮事件
 -(void)backAction{
     [self shrinkView];
@@ -259,10 +249,24 @@
     }
     
 }
+
+#pragma mark function
 //弹出提示，跳转至登陆页面
 -(void)alertLoginView {
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"你尚未登录，是否登陆？" delegate:self cancelButtonTitle:@"否"  otherButtonTitles:@"是", nil];
     [alert show];
     [alert release];
+}
+//缩小视图 方法
+-(void)shrinkView {
+    [UIApplication sharedApplication].statusBarHidden=NO;
+    [UIView animateWithDuration:0.2 animations:^{
+        self.frame = _frame;
+        [[self viewWithTag:1023]setHidden:YES];
+        [[self viewWithTag:1024]setHidden:YES];
+    } completion:^(BOOL finished) {
+        [self removeFromSuperview];
+        //        RELEASE_SAFELY(self);
+    }];
 }
 @end
