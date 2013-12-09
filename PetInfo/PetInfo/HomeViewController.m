@@ -9,6 +9,7 @@
 #import "HomeViewController.h"
 #import "DataService.h"
 #import "UIButton+WebCache.h"
+#import "UIImageView+WebCache.h"
 #import "HomeButtonViewController.h"
 #import "BaseNavViewController.h"
 #import "LoginViewController.h"
@@ -161,8 +162,8 @@
     UIButton *imageBtn=(UIButton *)[cell.contentView viewWithTag:1012];
     [imageBtn setImageWithURL:[NSURL URLWithString: model.pathMin]];
     imageBtn.tag=1020+indexPath.row;
-    [imageBtn addTarget:self action:@selector(imageButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     imageBtn.imageView.contentMode=UIViewContentModeScaleAspectFit;
+    [imageBtn addTarget:self action:@selector(imageButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     countLabel.text = [NSString stringWithFormat:@"%d",indexPath.row+1];
     return cell;
 }
