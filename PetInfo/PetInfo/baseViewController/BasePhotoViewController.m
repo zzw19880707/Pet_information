@@ -7,19 +7,52 @@
 //
 
 #import "BasePhotoViewController.h"
-#import "DataAccess.h"
 #import "DataService.h"
 #import "ImageWallModel.h"
 #import "MBProgressHUD.h"
-@interface BasePhotoViewController ()
+#import "TMQuiltView.h"
+#import "UIImageView+WebCache.h"
+#import "TMPhotoQuiltViewCell.h"
+#import "UIImageView+WebCache.h"
+#import "BaseNavViewController.h"
+#import "LoginViewController.h"
+#import "Reachability.h"
+@interface BasePhotoViewController ()<TMQuiltViewDataSource,TMQuiltViewDelegate>
+{
+	__block TMQuiltView *qtmquitView;
+}
+@property (nonatomic, retain) NSMutableArray *images;
 
 @end
 @implementation BasePhotoViewController
-@synthesize aoView;
-//@synthesize data;
+
+@synthesize images = _images;
+//判断当前的网络是3g还是wifi
+-(NSString*)GetCurrntNet
+{
+    NSString* result = nil;
+    Reachability *r = [Reachability reachabilityWithHostName:
+                       BASE_URL ];
+//                       class="s3" style="word-wrap:break-word;margin:0px;padding:0px;">];
+    _pn([r currentReachabilityStatus]);
+    switch ([r currentReachabilityStatus]) {
+        case NotReachable:// 没有网络连接
+            result=nil;
+            break;
+        case ReachableViaWWAN:// 使用3G网络
+            result=@"3g";
+            break;
+        case ReachableViaWiFi:// 使用WiFi网络
+            result=@"wifi";
+            break;
+    }
+    return result;
+}
 #pragma mark UI
 -(void)viewDidLoad{
     [super viewDidLoad];
+    
+    
     _HUD=[[MBProgressHUD alloc]initWithView:self.view];
     [self.view addSubview:_HUD];
     //如果设置此属性则当前的view置于后台
@@ -30,18 +63,39 @@
     
     //显示对话框
     [_HUD show:YES];
-//    self.data =[[NSMutableArray alloc]init];
-    self.aoView =[[AOWaterView alloc]initWithDataArray:nil];
-    //滚动条代理
-    self.aoView.delegate =self;
-    [self.view addSubview:self.aoView];
-    //刷新数据
-    [self refreshView];
+
+    self.data =[[NSMutableArray alloc]init];
+    qtmquitView = [[TMQuiltView alloc] initWithFrame:CGRectMake(0, 0, 320, ScreenHeight-10-44-44-25)];
+	qtmquitView.delegate = self;
+	qtmquitView.dataSource = self;
+    _dataService =[[DataService alloc]init];
+	_dataService.eventDelegate = self;
+	[self.view addSubview:qtmquitView];
+    [qtmquitView reloadData];
+    NSString *net =[self GetCurrntNet];
+    if(net==nil){
+        
+    }else{
+        //刷新数据
+        [self refreshView];
+    }
+
     //61秒后设置超时
     [self performSelector:@selector(outTime) withObject:nil afterDelay:61];
     [self createHeaderView];
     [self performSelector:@selector(testFinishedLoadData) withObject:nil afterDelay:0.0f];
-    
+}
+
+
+-(void)viewWillAppear:(BOOL)animated{
+    _user_id =[[NSUserDefaults standardUserDefaults]integerForKey:@"user_id"];
+    if (_fullImageView!=NULL) {
+        [_fullImageView setHidden: NO];
+        [self performSelector:@selector(fullhidden) withObject:nil afterDelay:0.1];
+    }
+}
+-(void)fullhidden{
+    [UIApplication sharedApplication].statusBarHidden=YES;
 }
 //超时
 -(void)outTime{
@@ -65,31 +119,26 @@
                           CGRectMake(0.0f, 0.0f - self.view.bounds.size.height,
                                      self.view.frame.size.width, self.view.bounds.size.height)];
     _refreshHeaderView.delegate = self;
-	[self.aoView addSubview:_refreshHeaderView];
+    
+	[qtmquitView addSubview:_refreshHeaderView];
     
     [_refreshHeaderView refreshLastUpdatedDate];
 }
--(void)removeHeaderView{
-    if (_refreshHeaderView && [_refreshHeaderView superview]) {
-        [_refreshHeaderView removeFromSuperview];
-    }
-    _refreshHeaderView = nil;
-}
 -(void)setFooterView{
-    CGFloat height = MAX(self.aoView.contentSize.height, self.aoView.frame.size.height);
+    CGFloat height = MAX(qtmquitView.contentSize.height, qtmquitView.frame.size.height);
     if (_refreshFooterView && [_refreshFooterView superview]) {
         // reset position
         _refreshFooterView.frame = CGRectMake(0.0f,
                                               height,
-                                              self.aoView.frame.size.width,
+                                              qtmquitView.frame.size.width,
                                               self.view.bounds.size.height);
     }else {
         // create the footerView
         _refreshFooterView = [[EGORefreshTableFooterView alloc] initWithFrame:
                               CGRectMake(0.0f, height,
-                                         self.aoView.frame.size.width, self.view.bounds.size.height)];
+                                         qtmquitView.frame.size.width, self.view.bounds.size.height)];
         _refreshFooterView.delegate = self;
-        [self.aoView addSubview:_refreshFooterView];
+        [qtmquitView addSubview:_refreshFooterView];
     }
     
     if (_refreshFooterView) {
@@ -105,31 +154,6 @@
 //设置屏幕方向
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
 	return YES;
-}
-#pragma mark 按钮事件
-//点击图片按钮事件
--(void)click:(ImageWallModel *)data{
-    _pn(123);
-}
-#pragma mark-
-#pragma mark force to show the refresh headerView
--(void)showRefreshHeader:(BOOL)animated{
-	if (animated)
-	{
-		[UIView beginAnimations:nil context:NULL];
-		[UIView setAnimationDuration:0.2];
-		self.aoView.contentInset = UIEdgeInsetsMake(60.0f, 0.0f, 0.0f, 0.0f);
-        // scroll the table view to the top region
-        [self.aoView scrollRectToVisible:CGRectMake(0, 0.0f, 1, 1) animated:NO];
-        [UIView commitAnimations];
-	}
-	else
-	{
-        self.aoView.contentInset = UIEdgeInsetsMake(60.0f, 0.0f, 0.0f, 0.0f);
-		[self.aoView scrollRectToVisible:CGRectMake(0, 0.0f, 1, 1) animated:NO];
-	}
-    
-    [_refreshHeaderView setState:EGOOPullRefreshLoading];
 }
 //===============
 //刷新delegate
@@ -163,11 +187,11 @@
 	_reloading = NO;
     
 	if (_refreshHeaderView) {
-        [_refreshHeaderView egoRefreshScrollViewDataSourceDidFinishedLoading:self.aoView];
+        [_refreshHeaderView egoRefreshScrollViewDataSourceDidFinishedLoading:qtmquitView];
     }
     
     if (_refreshFooterView) {
-        [_refreshFooterView egoRefreshScrollViewDataSourceDidFinishedLoading:self.aoView];
+        [_refreshFooterView egoRefreshScrollViewDataSourceDidFinishedLoading:qtmquitView];
         [self setFooterView];
     }
     
@@ -221,46 +245,38 @@
 
 //刷新调用的方法
 -(void)refreshView{
-    
-    [DataService requestWithURL:GetAOImg andparams:nil andhttpMethod:@"POST" completeBlock:^(id result) {
-        NSArray *array =[result objectForKey:@"celldata"];
-        NSMutableArray *data =[[NSMutableArray alloc]init];
-        for (NSDictionary *dic in array) {
-            ImageWallModel *model = [[ImageWallModel alloc]initWithDataDic:dic];
-//            [self.data addObject:model];
-            [data addObject:model];
-            [model release];
-        }
-        
-        [self.aoView refreshView:data];
-        [self outTime];
-        [self testFinishedLoadData];
+    [self.data  removeAllObjects];
+    [_dataService requestWithURL:GetAOImg andparams:nil andhttpMethod:@"POST"];
+}
 
-        
-    }andErrorBlock:^(NSError *error) {
-        
-    }];
+#pragma mark DataService Delegate
+-(void)requestFinished:(id )result{
+    NSArray *array =[result objectForKey:@"celldata"];
+
+    if (self.data.count==0) {
+        [self.images removeAllObjects];
+    }
+    for (NSDictionary *dic in array) {
+        ImageWallModel *model = [[ImageWallModel alloc]initWithDataDic:dic];
+        [self.data addObject:model];
+        [model release];
+    }
+    for(int i = 0; i < array.count; i++) {
+        ImageWallModel *model = self.data[i];
+        [_images addObject:model.pathMin];
+    }
+    [qtmquitView reloadData];
+
+    [self outTime];
+    [self testFinishedLoadData];
     
+
 }
 //加载调用的方法
 -(void)getNextPageView{
     [self removeFooterView];
-
-    [DataService requestWithURL:GetAOImg andparams:nil andhttpMethod:@"POST" completeBlock:^(id result) {
-        NSArray *array =[result objectForKey:@"celldata"];
-        NSMutableArray *data =[[NSMutableArray alloc]init];
-        for (NSDictionary *dic in array) {
-            ImageWallModel *model = [[ImageWallModel alloc]initWithDataDic:dic];
-            [data addObject:model];
-            [model release];
-        }
-        [self.aoView getNextPage:data];
-        [self testFinishedLoadData];
-        
-        
-    } andErrorBlock:^(NSError *error) {
-        
-    }];
+    [_dataService requestWithURL:GetAOImg andparams:nil andhttpMethod:@"POST"];
+    
 }
 //
 -(void)testFinishedLoadData{
@@ -268,6 +284,109 @@
     [self setFooterView];
 }
 
+
+
+- (NSMutableArray *)images
+{
+    if (!_images)
+	{
+        NSMutableArray *imageNames = [NSMutableArray array];
+//        for(int i = 0; i < 10; i++) {
+//            [imageNames addObject:[NSString stringWithFormat:@"%d.jpeg", i % 10 + 1]];
+//            ImageWallModel *model = self.data[i];
+//            [imageNames addObject:model.pathMin];
+//        }
+        _images = [imageNames retain];
+
+    }
+    return _images;
+}
+
+
+- (UIImage *)imageAtIndexPath:(NSIndexPath *)indexPath {
+//    return [UIImage imageNamed:[self.images objectAtIndex:indexPath.row]];
+    NSString *url =[self.images objectAtIndex:indexPath.row];
+    UIImageView *imageView = [[UIImageView alloc]init];
+    [imageView setImageWithURL:[NSURL URLWithString:url]];
+    UIImage *image = imageView.image;
+    [imageView release];
+    return image;
+}
+
+- (NSInteger)quiltViewNumberOfCells:(TMQuiltView *)TMQuiltView {
+    return [self.images count];
+}
+
+- (TMQuiltViewCell *)quiltView:(TMQuiltView *)quiltView cellAtIndexPath:(NSIndexPath *)indexPath {
+    TMPhotoQuiltViewCell *cell = (TMPhotoQuiltViewCell *)[quiltView dequeueReusableCellWithReuseIdentifier:@"PhotoCell"];
+    if (!cell) {
+        cell = [[[TMPhotoQuiltViewCell alloc] initWithReuseIdentifier:@"PhotoCell"] autorelease];
+    }
+    
+    cell.photoView.image = [self imageAtIndexPath:indexPath];
+    ImageWallModel *model =self.data[indexPath.row];
+    cell.titleLabel.text = model.des;
+    cell.goodLabel.text = [NSString stringWithFormat:@"%@",model.good];
+    return cell;
+}
+
+#pragma mark - TMQuiltViewDelegate
+
+- (NSInteger)quiltViewNumberOfColumns:(TMQuiltView *)quiltView {
+	
+    
+    if ([[UIDevice currentDevice] orientation] == UIDeviceOrientationLandscapeLeft
+        || [[UIDevice currentDevice] orientation] == UIDeviceOrientationLandscapeRight)
+	{
+        return 3;
+    } else {
+        return 2;
+    }
+}
+
+- (CGFloat)quiltView:(TMQuiltView *)quiltView heightForCellAtIndexPath:(NSIndexPath *)indexPath
+{
+    return [self imageAtIndexPath:indexPath].size.height / [self quiltViewNumberOfColumns:quiltView];
+}
+
+- (void)quiltView:(TMQuiltView *)quiltView didSelectCellAtIndexPath:(NSIndexPath *)indexPath
+{
+//	NSLog(@"index:%d",indexPath.row);
+    ImageWallModel *model =self.data[indexPath.row];
+    //获取按钮位置
+    CGPoint point =[quiltView convertPoint:CGPointMake(0, 0) toView:[UIApplication sharedApplication].keyWindow];
+    CGRect frame ;
+    frame.origin=point;
+    frame.size=quiltView.size;
+    
+    if (_fullImageView == NULL) {
+        _fullImageView=[[FullView alloc]initWithModel:model andFrame:frame];
+    }
+    
+    [_fullImageView setImageWithURL:[NSURL URLWithString:model.path]];
+    _fullImageView.eventDelegate =self;
+    
+    [UIView animateWithDuration:0.2 animations:^{
+        _fullImageView.frame=CGRectMake(0, 0, ScreenWidth, ScreenHeight);
+    } completion:^(BOOL finished) {
+        [UIApplication sharedApplication].statusBarHidden=YES;
+        [[_fullImageView viewWithTag:1023]setHidden:NO];
+        [[_fullImageView viewWithTag:1024]setHidden:NO];
+        
+    }];
+    [self.view.window addSubview:_fullImageView];
+    
+}
+#pragma mark -FullImageViewDelegate
+- (void) presentModalViewController {
+    LoginViewController *view =[[LoginViewController alloc]init] ;
+    view.isCancelButton =YES;
+    if (_fullImageView!=NULL) {
+        [_fullImageView setHidden:YES];
+        [UIApplication sharedApplication].statusBarHidden=NO;
+    }
+    [self presentModalViewController:[[BaseNavViewController alloc]initWithRootViewController:view] animated:YES];
+}
 #pragma mark 内存管理
 -(void)dealloc{
     RELEASE_SAFELY(_HUD);

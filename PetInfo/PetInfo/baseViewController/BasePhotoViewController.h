@@ -6,12 +6,14 @@
 //  Copyright (c) 2013年 佐筱猪. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+//#import <UIKit/UIKit.h>
 #import "EGORefreshTableHeaderView.h"
 #import "EGORefreshTableFooterView.h"
-#import "AOWaterView.h"
 #import "MBProgressHUD.h"
-@interface BasePhotoViewController : UIViewController<EGORefreshTableDelegate,UIScrollViewDelegate,imageDelegate>
+#import "FullView.h"
+#import "DataService.h"
+#import "BaseViewController.h"
+@interface BasePhotoViewController : BaseViewController<EGORefreshTableDelegate,UIScrollViewDelegate,ASIRequest,FullImageViewDelegate>
 {
     //EGOHeader
     EGORefreshTableHeaderView *_refreshHeaderView;
@@ -21,10 +23,16 @@
     BOOL _reloading;
     
     __block MBProgressHUD *_HUD;
+    
+    DataService *_dataService;
+//全屏视图
+    FullView *_fullImageView;
+//登陆用户id
+    NSInteger _user_id;
 }
-@property(nonatomic,strong)  AOWaterView *aoView;
+
 //获取的data数据
-//@property(nonatomic,retain) __block NSMutableArray *data;
+@property(nonatomic,retain)  NSMutableArray *data;
 //访问路径
 @property (nonatomic,retain) NSString *baseURL;
 //访问参数
