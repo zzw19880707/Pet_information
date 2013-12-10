@@ -387,6 +387,9 @@
     }
     [self presentModalViewController:[[BaseNavViewController alloc]initWithRootViewController:view] animated:YES];
 }
+- (void) releaseFullView{
+    RELEASE_SAFELY(_fullImageView);
+}
 #pragma mark 内存管理
 -(void)dealloc{
     RELEASE_SAFELY(_HUD);
