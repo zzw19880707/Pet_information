@@ -9,8 +9,8 @@
 #import "BaseModel.h"
 
 @interface ImageWallModel : BaseModel
-@property float width;//图片宽
-@property float height;//图片高
+@property (nonatomic,retain) NSNumber *  width;//图片宽
+@property (nonatomic,retain) NSNumber * height;//图片高
 @property (nonatomic,retain) NSNumber *imageId;//图片id
 @property (nonatomic,retain) NSNumber *userId;//用户id
 @property (nonatomic,copy) NSString *path;//大图路径
