@@ -195,7 +195,8 @@
 }
 //点赞按钮事件
 -(void)GoodBadAction:(UIButton *)button{
-    if ( [[NSUserDefaults standardUserDefaults]integerForKey:@"user_id"]==0) {
+    NSInteger user_id=[[NSUserDefaults standardUserDefaults]integerForKey:@"user_id"];
+    if ( user_id==0) {
         [self alertLoginView];
         return;
     }
@@ -232,7 +233,7 @@
         value=@"add";
     }
     NSMutableDictionary *params = [[NSMutableDictionary alloc]initWithCapacity:2];
-    [params setDictionary:@{@"key": key,@"value":value}];
+    [params setDictionary:@{@"key": key,@"value":value,@"user_id":[NSNumber numberWithInteger:user_id]}];
     [DataService  requestWithURL:VoteServlet andparams:params andhttpMethod:@"GET" completeBlock:^(id result) {
         
     } andErrorBlock:^(NSError *error) {
