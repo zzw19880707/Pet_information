@@ -183,7 +183,7 @@
 //}
 
 
-- (void) requestWithURL:(NSString *)urlstring andparams:(NSMutableDictionary *)params andhttpMethod: (NSString *)httpMethod{
+- (ASIHTTPRequest *) requestWithURL:(NSString *)urlstring andparams:(NSMutableDictionary *)params andhttpMethod: (NSString *)httpMethod{
     //拼接url地址
     urlstring = [BASE_URL stringByAppendingString:urlstring];
     
@@ -244,8 +244,7 @@
     _po(url);
     [request setDelegate:self];
     [request startAsynchronous];
-    
-    
+    return request;
 }
 - (void)requestFinished:(ASIHTTPRequest *)request{
     NSData *data = request.responseData;
