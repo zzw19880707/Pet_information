@@ -246,7 +246,7 @@
 //刷新调用的方法
 -(void)refreshView{
     [self.data  removeAllObjects];
-    [_dataService requestWithURL:GetAOImg andparams:nil andhttpMethod:@"POST"];
+    self.request = [_dataService requestWithURL:GetAOImg andparams:nil andhttpMethod:@"POST"];
 }
 
 #pragma mark DataService Delegate
@@ -272,10 +272,13 @@
     
 
 }
+-(void)requestFailed:(ASIHTTPRequest *)request{
+    alertContent([[request error] localizedDescription]);
+}
 //加载调用的方法
 -(void)getNextPageView{
     [self removeFooterView];
-    [_dataService requestWithURL:GetAOImg andparams:nil andhttpMethod:@"POST"];
+    self.request =[_dataService requestWithURL:GetAOImg andparams:nil andhttpMethod:@"POST"];
     
 }
 //
@@ -399,4 +402,5 @@
     MARK;
     [super dealloc];
 }
+
 @end
