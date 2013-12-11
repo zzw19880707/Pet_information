@@ -7,10 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@interface MainViewController : UITabBarController{
+#import <CoreLocation/CoreLocation.h>
+@interface MainViewController : UITabBarController <CLLocationManagerDelegate,ASIRequest>{
     UIView *_tabbarView;//tabbar
     UIImageView *_sliderView;//滑动器
+    float _longitude;
+    float _latitude;
+//  加载时大图
+    UIImageView *_backgroundView;
+    ASIHTTPRequest *request;
+    //初始化home数据
+    NSArray *_data;
+    NSArray *_celldata;
 }
 
 @end
