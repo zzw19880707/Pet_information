@@ -9,6 +9,8 @@
 #import "BaseViewController.h"
 //#import "UIFactory.h"
 #import "MBProgressHUD.h"
+#import "LoginViewController.h"
+#import "BaseNavViewController.h"
 @interface BaseViewController ()
 
 @end
@@ -150,11 +152,17 @@
     MARK;
     [super dealloc];
 }
+-(void)viewDidUnload{
+    [super viewDidUnload];
+}
+-(void)viewWillDisappear:(BOOL)animated{
+    [self hideHUD];
+    [self.request clearDelegatesAndCancel];
+    [super viewWillDisappear:animated];
+}
 -(void)setTitle:(NSString *)title{
     [super setTitle:title];
-    
     UILabel *titlelabel=[[UILabel alloc]initWithFrame:CGRectZero];
-//    titlelabel.textColor=[UIColor blackColor];
     titlelabel.font=[UIFont boldSystemFontOfSize:18.0f];
     titlelabel.backgroundColor= PetBackgroundColor;
     titlelabel.text=title;
@@ -162,6 +170,45 @@
     [titlelabel sizeToFit];
     self.navigationItem.titleView = [titlelabel autorelease];
 }
+//提示登录对话框
+-(void)alertLoginView {
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"你尚未登录，是否登陆？" delegate:self cancelButtonTitle:@"否"  otherButtonTitles:@"是", nil];
+    alert.tag = INT16_MAX;
+    [alert show];
+    [alert release];
+}
 
+#pragma mark UIAlertViewDelegate
+- (void)alertView:(UIAlertView *)alertView willDismissWithButtonIndex:(NSInteger)buttonIndex{
+    if (alertView.tag ==INT16_MAX) {
+        if (buttonIndex ==1) {
+            LoginViewController *view =[[LoginViewController alloc]init] ;
+            view.isCancelButton =YES;
+            [self presentModalViewController:[[BaseNavViewController alloc]initWithRootViewController:view] animated:YES];
+        }
+    }
+    
+}
+//定位
+-(void)Location {
+    CLLocationManager *locationManager = [[CLLocationManager alloc] init];
+    locationManager.delegate = self;
+    //精度10米
+    [locationManager setDesiredAccuracy:kCLLocationAccuracyNearestTenMeters];
+    [locationManager startUpdatingLocation];
+}
+
+#pragma mark - CLLocationManager delegate
+- (void)locationManager:(CLLocationManager *)manager
+	didUpdateToLocation:(CLLocation *)newLocation
+		   fromLocation:(CLLocation *)oldLocation {
+    
+    [manager stopUpdatingLocation];
+    
+    _longitude = newLocation.coordinate.longitude;
+    _latitude = newLocation.coordinate.latitude;
+    
+    
+}
 
 @end

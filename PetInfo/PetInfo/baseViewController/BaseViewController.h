@@ -8,10 +8,15 @@
 
 #import <UIKit/UIKit.h>
 #import "AppDelegate.h"
+#import "ASIHTTPRequest.h"
+#import <CoreLocation/CoreLocation.h>
+
 @class MBProgressHUD;
-@interface BaseViewController : UIViewController <UIActionSheetDelegate,UINavigationControllerDelegate, UIImagePickerControllerDelegate>{
+@interface BaseViewController : UIViewController <UIActionSheetDelegate,UINavigationControllerDelegate, UIImagePickerControllerDelegate,CLLocationManagerDelegate>{
     UIWindow *_tipWindow;
-    
+    //经纬度
+    float _longitude;
+    float _latitude;
     
 }
 @property(nonatomic,retain)MBProgressHUD *hud;
@@ -27,4 +32,7 @@
 //隐藏加载提示
 - (void)hideHUD;
 -(void)showStaticTip:(BOOL)show title:(NSString *)title;//设置状态栏提示
+//提示登录对话框
+-(void)alertLoginView;
+@property (nonatomic,retain) ASIHTTPRequest *request;
 @end
