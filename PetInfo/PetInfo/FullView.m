@@ -8,7 +8,6 @@
 
 #import "FullView.h"
 #import "ImageWallModel.h"
-#import "DataService.h"
 @implementation FullView
 
 - (id)initWithFrame:(CGRect)frame
@@ -24,6 +23,7 @@
 {
     self = [super init];
     if (self) {
+        _model = model;
         self.frame=CGRectMake(0, 0, ScreenWidth, ScreenHeight);
         self.backgroundColor=PetBackgroundColor;
         self.userInteractionEnabled=YES;//使view获取交互响应
@@ -195,8 +195,8 @@
 }
 //点赞按钮事件
 -(void)GoodBadAction:(UIButton *)button{
-    NSInteger user_id=[[NSUserDefaults standardUserDefaults]integerForKey:@"user_id"];
-    if ( user_id==0) {
+    NSInteger self_user_id=[[NSUserDefaults standardUserDefaults]integerForKey:user_id];
+    if ( self_user_id==0) {
         [self alertLoginView];
         return;
     }
@@ -233,7 +233,7 @@
         value=@"add";
     }
     NSMutableDictionary *params = [[NSMutableDictionary alloc]initWithCapacity:2];
-    [params setDictionary:@{@"key": key,@"value":value,@"user_id":[NSNumber numberWithInteger:user_id]}];
+    [params setDictionary:@{@"image_id":_model.imageId,@"key": key,@"value":value,@"user_id":[NSNumber numberWithInteger:self_user_id]}];
     [DataService  requestWithURL:VoteServlet andparams:params andhttpMethod:@"GET" completeBlock:^(id result) {
         
     } andErrorBlock:^(NSError *error) {
@@ -267,7 +267,7 @@
         [[self viewWithTag:1024]setHidden:YES];
     } completion:^(BOOL finished) {
         [self removeFromSuperview];
-        //        RELEASE_SAFELY(self);
+        [self.eventDelegate releaseFullView];
     }];
 }
 @end

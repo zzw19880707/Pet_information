@@ -1,18 +1,15 @@
 //
 //  SendViewController.h
 //  PetInfo
-//
+//  发送图片及描述的页面，同时会上传坐标点。
 //  Created by 佐筱猪 on 13-11-28.
 //  Copyright (c) 2013年 佐筱猪. All rights reserved.
 //
 
 #import "BaseViewController.h"
-#import <CoreLocation/CoreLocation.h>
 
-@interface SendViewController : BaseViewController<CLLocationManagerDelegate> {
-    //经纬度
-    float _longitude;
-    float _latitude;
+@interface SendViewController : BaseViewController {
+
     UIImageView *_fullImageView;
 
 }

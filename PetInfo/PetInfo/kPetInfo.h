@@ -12,7 +12,7 @@
 #pragma mark NSNotificationCenter
 //首页加载时,定位完成的通知
 #define isEndLocation @"isEndLocation"
-
+#define isLoadHomeData @"isLoadHomeData"
 
 #pragma mark UserDefaults
 //判断是否是第一次登陆

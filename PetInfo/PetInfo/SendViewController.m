@@ -8,7 +8,6 @@
 
 #import "SendViewController.h"
 #import <QuartzCore/QuartzCore.h>
-#import "DataService.h"
 @interface SendViewController ()
 
 @end
@@ -27,8 +26,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    _latitude=0.0f;
-    _longitude =0.0f;
+//    _latitude=0.0f;
+//    _longitude =0.0f;
     [self _initView];
     UIButton *button = [[UIButton alloc]init];
     button.backgroundColor = PetTextColor;
@@ -103,15 +102,15 @@
     NSMutableDictionary *params =[[NSMutableDictionary alloc]init];
     
     [params setValue:UIImagePNGRepresentation(self.sendImage) forKey:@"image"];
-    [params setValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"user_id"] forKey:@"userId"];
-    if (_latitude ==0.0f&&_longitude ==0.0f) {
-        
-    }else{
-        [params setValue:[NSNumber numberWithFloat:_longitude] forKey:@"longitude"];
-        [params setValue:[NSNumber numberWithFloat:_latitude] forKey:@"latitude"];
-    }
+    [params setValue:[[NSUserDefaults standardUserDefaults] objectForKey:user_id] forKey:@"userId"];
+//    if (_latitude ==0.0f&&_longitude ==0.0f) {
+//        
+//    }else{
+//        [params setValue:[NSNumber numberWithFloat:_longitude] forKey:@"longitude"];
+//        [params setValue:[NSNumber numberWithFloat:_latitude] forKey:@"latitude"];
+//    }
     [self showStaticTip:YES title:@"发送中.."];
-    [DataService requestWithURL:@"UploadServlet" andparams:params andhttpMethod:@"POST" completeBlock:^(id result) {
+    [DataService requestWithURL:UploadServlet andparams:params andhttpMethod:@"POST" completeBlock:^(id result) {
         [self showStaticTip:NO title:@"发送成功！"];
         [self dismissModalViewControllerAnimated:YES];
     } andErrorBlock:^(NSError *error) {
@@ -143,14 +142,7 @@
     UIButton *cButton =(UIButton *)[self.editorBar viewWithTag:100];
     cButton.selected =NO;
 }
-//定位
--(void)Location {
-    CLLocationManager *locationManager = [[CLLocationManager alloc] init];
-    locationManager.delegate = self;
-    //精度10米
-    [locationManager setDesiredAccuracy:kCLLocationAccuracyNearestTenMeters];
-    [locationManager startUpdatingLocation];
-}
+
 //图片
 -(void)selectImage{
     UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"拍照" otherButtonTitles:@"用户相册", nil];
@@ -266,18 +258,7 @@
     
 }
 
-#pragma mark - CLLocationManager delegate
-- (void)locationManager:(CLLocationManager *)manager
-	didUpdateToLocation:(CLLocation *)newLocation
-		   fromLocation:(CLLocation *)oldLocation {
-    
-    [manager stopUpdatingLocation];
-    
-    _longitude = newLocation.coordinate.longitude;
-    _latitude = newLocation.coordinate.latitude;
-    
-    
-}
+
 
 #pragma mark 内存管理
 - (void)didReceiveMemoryWarning

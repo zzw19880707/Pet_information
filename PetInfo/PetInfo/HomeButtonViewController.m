@@ -7,7 +7,7 @@
 //
 
 #import "HomeButtonViewController.h"
-//#import "HomeDetailViewController.h"
+#import "HomeDetailViewController.h"
 @interface HomeButtonViewController ()
 
 @end
@@ -39,35 +39,19 @@
         case kNearType://附近
             _data =[[dic objectForKey:@"near"]retain];;
             break;
+        default://剩下的不需要读取本地文件
+            break;
     }
 }
 
 
 #pragma mark UITableViewDelegate
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    HomeButtonViewController *homeDetailVC=[[HomeButtonViewController alloc]init];
-    if (self.homeType<3) {
-        homeDetailVC.homeType=self.homeType+3;
-        homeDetailVC.titleText=self.titleText;
-    }else{
-        switch (self.homeType) {
-            case kDiseaseType://常见病
-                
-            case kMedicineType://药品
-                break;
-            case kNearType://附近
-                break;
-            case kDetailDiseaseType://
-                break;
-            case kDetailNearType://
-                break;
-            case kDetailMedicineType://
-                break;
-            default:
-                break;
-        }
 
-    }
+    HomeDetailViewController *homeDetailVC =[[HomeDetailViewController alloc]init];
+    homeDetailVC.index = indexPath.row;
+    homeDetailVC.homeType=self.homeType+3;
+    homeDetailVC.titleText = _data[indexPath.row];
     [self.navigationController pushViewController:homeDetailVC animated:YES];
     //设置为未选中状态
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];

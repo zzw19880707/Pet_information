@@ -14,25 +14,32 @@
 @class MBProgressHUD;
 @interface BaseViewController : UIViewController <UIActionSheetDelegate,UINavigationControllerDelegate, UIImagePickerControllerDelegate,CLLocationManagerDelegate>{
     UIWindow *_tipWindow;
-    //经纬度
-    float _longitude;
-    float _latitude;
-    
 }
-@property(nonatomic,retain)MBProgressHUD *hud;
+
 //@property(nonatomic,assign)BOOL isBackButton; //navigation 返回
 
-@property (nonatomic,assign)BOOL isCancelButton;//取消按钮
+//返回appdelegate
 -(AppDelegate *)appDelegate;
-
 //显示加载提示
 - (void)showHUD:(NSString *)title isDim:(BOOL)isDim;
 //显示加载完成提示
 - (void)showHUDComplete:(NSString *)title;
 //隐藏加载提示
 - (void)hideHUD;
--(void)showStaticTip:(BOOL)show title:(NSString *)title;//设置状态栏提示
+//设置状态栏提示
+-(void)showStaticTip:(BOOL)show title:(NSString *)title;
 //提示登录对话框
 -(void)alertLoginView;
+//定位方法
+-(void)Location;
+
+//经纬度
+@property (nonatomic,assign) float longitude;
+@property (nonatomic,assign) float latitude;
+//取消按钮
+@property (nonatomic,assign)BOOL isCancelButton;
+//ASI访问请求。用于取消异步访问
 @property (nonatomic,retain) ASIHTTPRequest *request;
+//加载框
+@property(nonatomic,retain)MBProgressHUD *hud;
 @end

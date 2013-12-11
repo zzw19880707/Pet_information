@@ -7,10 +7,14 @@
 //
 
 #import "BaseViewController.h"
+#import "HomeDetailTableView.h"
 
-@interface HomeDetailViewController : BaseViewController<UITableViewDelegate,UITableViewDataSource>{
+@interface HomeDetailViewController : BaseViewController <ASIRequest,UItableviewEventDelegate>{
     NSArray *_data;
 }
-@property (retain, nonatomic) IBOutlet UITableView *tabelView;
+@property (retain, nonatomic) IBOutlet HomeDetailTableView *tableView;
+@property (nonatomic, assign) int index;
+@property (assign,nonatomic) kHomeTableViewCellType homeType;
+@property (assign,nonatomic) NSString *titleText;
 
 @end

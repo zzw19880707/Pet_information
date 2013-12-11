@@ -26,51 +26,68 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self _initView];
 }
-
-
-#pragma mark UITableViewDelegate
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    HomeDetailViewController *homeDetailVC=[[HomeDetailViewController alloc]init];
+-(void)_initView{
+    DataService *dataService = [[DataService alloc]init];
+    dataService.eventDelegate = self;
+    NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
+    [params setValue:[NSNumber numberWithInt:self.index] forKey:@"category"];
     
-    [self.navigationController pushViewController:homeDetailVC animated:YES];
-    //设置为未选中状态
-    [self.tabelView deselectRowAtIndexPath:indexPath animated:YES];
+    [self showHUD:@"加载中..." isDim:YES];
+    self.tableView.index = self.index;
+    self.tableView.homeType = self.homeType;
+    switch (self.homeType) {
+        case kDetailMedicineType://药品
+            self.request =[dataService requestWithURL:MedicineServlet andparams:params andhttpMethod:@"GET"];
+            break;
+        case kDetailDiseaseType://常见病
+            self.request =[dataService requestWithURL:DiseaseServlet andparams:params andhttpMethod:@"GET"];
+            break;
+        case kDetailNearType://附近
+//            [params setValue:[NSNumber numberWithFloat:_longitude] forKey:@"longitude"];
+//            [params setValue:[NSNumber numberWithFloat:_latitude] forKey:@"latitude"];
+            self.request =[dataService requestWithURL:NearServlet andparams:params andhttpMethod:@"GET"];
+            break;
+        default:
+            break;
+    }
 }
-
-#pragma mark UITableViewDataSource
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return [_data count];
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    static NSString *buttoncellIndentifier=@"buttonCell";
-    UITableViewCell *cell=[tableView dequeueReusableCellWithIdentifier:buttoncellIndentifier];
-//    
-//    if (cell==nil) {
-//        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:buttoncellIndentifier];
-//        if (self.homeType ==kDiseaseType) {//常见病会添加图片
-//            UIImageView *image=[[UIImageView alloc]init];
-//            image.tag=1020;
-//            image.frame=CGRectMake(20, (44-30)/2, 50, 30);
-//            [cell.contentView addSubview:image];
-//            [image release];
-//            UILabel *label =[[UILabel alloc]init];
-//            label.tag=1021;
-//            label.frame=CGRectMake(90, (44-30)/2, 150, 30);
-//            [cell.contentView addSubview:label];
-//            [label release];
-//        }
-//    }
-//    
-//    cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
-//    cell.selectionStyle=UITableViewCellSelectionStyleNone;
-//   
+#pragma mark UItableviewEventDelegate
+-(void)pullDown:(BaseTableView *)tableView{
     
-    
-    return cell;
 }
+-(void)pullUp:(BaseTableView *)tableView{
+    
+}
+-(void)tableView:(BaseTableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+}
+#pragma mark ASIRequest delegate
+- (void)requestFinished:(id )result{
+    
+    [self hideHUD];
+    switch (self.homeType) {
+        case kDetailMedicineType://药品
+            _data =[result objectForKey:@"Medicine"];
+            break;
+        case kDetailDiseaseType://常见病
+            _data = [result objectForKey:@"Disease"];
+            break;
+        case kDetailNearType://附近
+            _data = [result objectForKey:@"Near"];
+            break;
+        default:
+            break;
+    }
+    self.tableView.data = _data;
 
+}
+-(void)requestFailed:(ASIHTTPRequest *)request{
+    [self hideHUD];
+    alertContent([[request error] localizedDescription]);
+}
+#pragma mark 内存管理
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -78,11 +95,11 @@
 }
 
 - (void)dealloc {
-    [_tabelView release];
+    RELEASE_SAFELY(_tableView);
     [super dealloc];
 }
 - (void)viewDidUnload {
-    [self setTabelView:nil];
+    [self setTableView:nil];
     [super viewDidUnload];
 }
 @end

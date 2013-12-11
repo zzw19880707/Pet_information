@@ -29,6 +29,8 @@
 #import "kPetInfo.h"
 //导入url地址和接口
 #import "BaseURL+Implements.h"
+//导入访问接口包
+#import "DataService.h"
 
 //home页按钮
 typedef enum kHomeTableViewCellType{
@@ -38,6 +40,6 @@ typedef enum kHomeTableViewCellType{
     kDiseaseType=2,//常见病
     //列表
     kDetailMedicineType=3,//药品列表
-    kDetailNearType=5,//附近列表
-    kDetailDiseaseType=4//常见病列表
+    kDetailDiseaseType=5,//附近列表
+    kDetailNearType=4//常见病列表
 }kHomeTableViewCellType ;

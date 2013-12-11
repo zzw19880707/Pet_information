@@ -11,7 +11,6 @@
 #import "EGORefreshTableFooterView.h"
 #import "MBProgressHUD.h"
 #import "FullView.h"
-#import "DataService.h"
 #import "BaseViewController.h"
 @interface BasePhotoViewController : BaseViewController<EGORefreshTableDelegate,UIScrollViewDelegate,ASIRequest,FullImageViewDelegate>
 {

@@ -37,7 +37,7 @@
     _pn([r currentReachabilityStatus]);
     switch ([r currentReachabilityStatus]) {
         case NotReachable:// 没有网络连接
-            result=nil;
+            result=@"no";
             break;
         case ReachableViaWWAN:// 使用3G网络
             result=@"3g";
@@ -73,7 +73,7 @@
 	[self.view addSubview:qtmquitView];
     [qtmquitView reloadData];
     NSString *net =[self GetCurrntNet];
-    if(net==nil){
+    if([net isEqualToString:@"no"]){
         
     }else{
         //刷新数据

@@ -16,7 +16,8 @@
 @end
 
 @implementation BaseViewController
-
+@synthesize latitude=_latitude;
+@synthesize longitude=_longitude;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -149,6 +150,8 @@
     // Dispose of any resources that can be recreated.
 }
 -(void)dealloc{
+    RELEASE_SAFELY(_request);
+    RELEASE_SAFELY(_hud);
     MARK;
     [super dealloc];
 }
@@ -189,13 +192,36 @@
     }
     
 }
+#pragma mark 重写longitude\latitude
+//-(float)longitude{
+//    if (!_longitude) {
+//        _longitude = [[NSUserDefaults standardUserDefaults]floatForKey:@""];
+//    }
+//    return _longitude;
+//}
+//-(float)latitude{
+//    if (!_latitude) {
+//        
+//    }
+//    return _latitude;
+//}
 //定位
 -(void)Location {
-    CLLocationManager *locationManager = [[CLLocationManager alloc] init];
-    locationManager.delegate = self;
-    //精度10米
-    [locationManager setDesiredAccuracy:kCLLocationAccuracyNearestTenMeters];
-    [locationManager startUpdatingLocation];
+    if([CLLocationManager locationServicesEnabled]){
+        if ([[NSUserDefaults standardUserDefaults]boolForKey:@"isLocation"]) {
+            
+        }else{
+            CLLocationManager *locationManager = [[CLLocationManager alloc] init];
+            locationManager.delegate = self;
+            //设置不筛选，(距离筛选器distanceFilter,下面表示设备至少移动1000米,才通知委托更新）
+            locationManager.distanceFilter = kCLDistanceFilterNone;
+            //精度10米
+            [locationManager setDesiredAccuracy:kCLLocationAccuracyNearestTenMeters];
+            [locationManager startUpdatingLocation];
+        }
+    }else{
+        alertContent(@"请在<设置>打开<定位服务>,以使用此功能");
+    }
 }
 
 #pragma mark - CLLocationManager delegate
@@ -204,11 +230,14 @@
 		   fromLocation:(CLLocation *)oldLocation {
     
     [manager stopUpdatingLocation];
-    
-    _longitude = newLocation.coordinate.longitude;
-    _latitude = newLocation.coordinate.latitude;
+    self.longitude = newLocation.coordinate.longitude;
+    self.latitude = newLocation.coordinate.latitude;
     
     
 }
-
+- (void)locationManager:(CLLocationManager *)manager
+       didFailWithError:(NSError *)error
+{
+    [manager stopUpdatingLocation];
+}
 @end

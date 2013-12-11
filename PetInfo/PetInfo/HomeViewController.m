@@ -7,7 +7,6 @@
 //
 
 #import "HomeViewController.h"
-#import "DataService.h"
 #import "UIButton+WebCache.h"
 #import "UIImageView+WebCache.h"
 #import "HomeButtonViewController.h"
@@ -31,7 +30,7 @@
     return self;
 }
 -(void)viewWillAppear:(BOOL)animated{
-    _user_id =[[NSUserDefaults standardUserDefaults]integerForKey:@"user_id"];
+    _user_id =[[NSUserDefaults standardUserDefaults]integerForKey:user_id];
     if (_fullImageView!=NULL) {
         [_fullImageView setHidden: NO];
         [self performSelector:@selector(fullhidden) withObject:nil afterDelay:0.1];
@@ -60,6 +59,7 @@
     
     [self _initAOView];
 
+     
 }
 
 //初始化AOScroller
@@ -87,9 +87,9 @@
     //加载网络，获取图片地址和title
     [DataService requestWithURL:GetAOImg andparams:params andhttpMethod:@"GET" completeBlock:^(id result) {
         //获取滚动条数据
-        _array=[result objectForKey:@"data"];
-        for (int i = 0; i<_array.count; i++) {
-            NSDictionary *dic=_array[i];
+        self.array=[result objectForKey:@"data"];
+        for (int i = 0; i<self.array.count; i++) {
+            NSDictionary *dic=self.array[i];
             [arr addObject:[dic objectForKey:@"imageurl"]];
             [strArr addObject:[NSString stringWithFormat:@"  【%@】\n%@\n%@",[dic objectForKey:@"category"],[dic objectForKey:@"title"],[dic objectForKey:@"content"]]];
         }
@@ -125,7 +125,7 @@
         [aSV release];
         
     } andErrorBlock:^(NSError *error) {
-#warning 错误信息
+#warning 
     }];
     [self.scrollView addSubview:ASVBGView];
     [ASVBGView release];
@@ -174,19 +174,30 @@
 
 
 #pragma mark 按钮事件
+//更多按钮
+- (IBAction)moreAction:(id)sender{
+    BasePhotoViewController *basePhoto =[[[BasePhotoViewController alloc]init]autorelease];
+#warning baseurl
+//    basePhoto.baseURL = ;
+//    basePhoto.params;
+    [self.navigationController pushViewController:basePhoto animated:YES];
+}
+//分享 发送按钮
 -(void)shareAction{
-    if(_user_id==0){
-        [self alertLoginView];
-    }else{
+//    if(_user_id==0){
+//        [super alertLoginView];
+//    }else{
         SendViewController *send=[[SendViewController alloc]init];
         send.isCancelButton=YES;
         BaseNavViewController *nav=[[BaseNavViewController alloc]initWithRootViewController:send];
         [self.navigationController presentViewController:nav animated:YES completion:NULL];
-    }
-    
+//    }
 }
+//中间按钮，根据不同的tag  选择不同的页面
 - (IBAction)btnAction:(UIButton *)sender {
     HomeButtonViewController *homeButtonVC=[[[HomeButtonViewController alloc]init] autorelease];
+    BasePhotoViewController *basePhoto =[[[BasePhotoViewController alloc]init]autorelease];
+
     //    homeButtonVC.isBackButton=YES;
     switch (sender.tag) {
         case 1001:
@@ -203,9 +214,10 @@
             break;
         case 1003:
             //晒靓照
-            
-            [self.navigationController pushViewController:[[[BasePhotoViewController alloc]init]autorelease] animated:YES];
-
+#warning baseurl
+            //    basePhoto.baseURL = ;
+            //    basePhoto.params;
+            [self.navigationController pushViewController:basePhoto animated:YES];
             break;
         case 1004:
             //附近
@@ -219,7 +231,6 @@
     }
     
 }
-
 //图片按钮点击变大
 -(void)imageButtonAction:(UIButton *)button{
     //点击的cell 位置
@@ -249,7 +260,6 @@
     [self.view.window addSubview:_fullImageView];
     
 }
-
 #pragma mark 方法
 //定位
 -(void)Location {
@@ -260,11 +270,6 @@
     [locationManager startUpdatingLocation];
 }
 
--(void)alertLoginView {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"你尚未登录，是否登陆？" delegate:self cancelButtonTitle:@"否"  otherButtonTitles:@"是", nil];
-    [alert show];
-    [alert release];
-}
 #pragma mark -FullImageViewDelegate
 - (void) presentModalViewController {
     LoginViewController *view =[[LoginViewController alloc]init] ;
@@ -275,6 +280,9 @@
     }
     [self presentModalViewController:[[BaseNavViewController alloc]initWithRootViewController:view] animated:YES];
 }
+- (void) releaseFullView {
+    RELEASE_SAFELY(_fullImageView);
+}
 #pragma mark - CLLocationManager delegate
 - (void)locationManager:(CLLocationManager *)manager
 	didUpdateToLocation:(CLLocation *)newLocation
@@ -282,11 +290,11 @@
     
     [manager stopUpdatingLocation];
     
-    _longtitude = newLocation.coordinate.longitude;
-    _latitude = newLocation.coordinate.latitude;
+//    _longitude = newLocation.coordinate.longitude;
+//    _latitude = newLocation.coordinate.latitude;
     NSMutableDictionary *params;
-    if (_user_id >0) {
-        params =[NSMutableDictionary dictionaryWithObjects:@[[NSNumber numberWithFloat:_longtitude],[NSNumber numberWithFloat:_latitude]] forKeys:@[@"longtitude",@"latitude"]];
+    if (_user_id ) {
+//        params =[NSMutableDictionary dictionaryWithObjects:@[[NSNumber numberWithFloat:_longitude],[NSNumber numberWithFloat:_latitude]] forKeys:@[@"longtitude",@"latitude"]];
     }else{
         params=nil;
     }
@@ -299,11 +307,11 @@
 }
 #pragma mark 内存管理
 - (void)dealloc {
-    [_scrollView release];
-    _scrollView=nil;
-    [_tableView release];
-    
-    [_label release];
+    RELEASE_SAFELY(_scrollView);
+    RELEASE_SAFELY(_tableView);
+    RELEASE_SAFELY(_label);
+    RELEASE_SAFELY(_array);
+    RELEASE_SAFELY(_cellData);
     MARK;
     [super dealloc];
 }
