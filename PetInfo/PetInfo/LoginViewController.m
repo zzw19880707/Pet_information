@@ -192,24 +192,10 @@ static NSString *kFieldKey=@"kFieldKey";
 //    [NSUserDefaults resetStandardUserDefaults];
     
     NSUserDefaults *userDefaults=[[NSUserDefaults standardUserDefaults]init];
-    [userDefaults setObject:txtUser.text forKey:@"username"];
-#warning 访问网络获取菜单，记录到userDefaults下
-    NSArray *array=@[@0,@2,@3,@4,@5,@11,@12];
-    NSMutableArray *menuArray=[[NSMutableArray alloc]initWithCapacity:[array count]];
-    for(int i=0; i<array.count;i++){
-        if(i>9){
-            NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:@[@1,[NSNumber numberWithInt:i],@0],[NSString stringWithFormat:@"%d",[array[i] intValue]], nil];
-            [menuArray addObject:dic];
-            
-        }else{
-            NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:@[@0,[NSNumber numberWithInt:i],@0],[NSString stringWithFormat:@"%d",[array[i] intValue]] ,nil];
-            [menuArray addObject:dic];
-            
-        }
-    }
-    [userDefaults setObject:menuArray forKey:@"menu"];
 
 #warning
+    //    [userDefaults setObject:txtUser.text forKey:@"username"];
+
     btnLogin.showsTouchWhenHighlighted = YES;
     [btnLogin setEnabled:NO];
     [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(login) userInfo:nil repeats:NO];
