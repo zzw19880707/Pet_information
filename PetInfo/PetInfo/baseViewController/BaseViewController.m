@@ -11,6 +11,8 @@
 #import "MBProgressHUD.h"
 #import "LoginViewController.h"
 #import "BaseNavViewController.h"
+#import "Reachability.h"
+
 @interface BaseViewController ()
 
 @end
@@ -32,11 +34,45 @@
 }
 
 #pragma mark - loading tips 加载提示
+//判断当前是否有网络
+-(BOOL) isConnectionAvailable{
+    BOOL isExistenceNetwork = YES;
+    Reachability *reach = [Reachability reachabilityWithHostName:BASE_URL];
+    switch ([reach currentReachabilityStatus]) {
+        case NotReachable:
+            isExistenceNetwork = NO;
+            //NSLog(@"notReachable");
+            break;
+        case ReachableViaWiFi:
+            isExistenceNetwork = YES;
+            //NSLog(@"WIFI");
+            break;
+        case ReachableViaWWAN:
+            isExistenceNetwork = YES;
+            //NSLog(@"3G");
+            break;
+    }
+    return isExistenceNetwork;
+}
+
 //显示加载提示
-- (void)showHUD:(NSString *)title isDim:(BOOL)isDim {
+- (BOOL )showHUD:(NSString *)title isDim:(BOOL)isDim {
     self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    self.hud.labelText = title;
-    self.hud.dimBackground = isDim;
+
+    if ([self isConnectionAvailable]) {
+        self.hud.labelText = title;
+        self.hud.dimBackground = isDim;
+        return YES;
+    }else{
+        self.hud.removeFromSuperViewOnHide =YES;
+        self.hud.mode = MBProgressHUDModeText;
+        self.hud.labelText = NSLocalizedString(INFO_NetNoReachable, nil);
+        self.hud.minSize = CGSizeMake(132.f, 108.0f);
+        [self.hud hide:YES afterDelay:3];
+        return NO;
+        
+    }
+    
 }
 //显示加载完成提示
 - (void)showHUDComplete:(NSString *)title {
@@ -208,9 +244,12 @@
 //定位
 -(void)Location {
     if([CLLocationManager locationServicesEnabled]){
-        if ([[NSUserDefaults standardUserDefaults]boolForKey:@"isLocation"]) {
-            
-        }else{
+        //已经定位
+        if ([[NSUserDefaults standardUserDefaults]boolForKey:isLocation]) {
+//            [];
+        }
+        //重新定位
+        else{
             CLLocationManager *locationManager = [[CLLocationManager alloc] init];
             locationManager.delegate = self;
             //设置不筛选，(距离筛选器distanceFilter,下面表示设备至少移动1000米,才通知委托更新）

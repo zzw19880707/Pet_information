@@ -21,7 +21,7 @@
 //返回appdelegate
 -(AppDelegate *)appDelegate;
 //显示加载提示
-- (void)showHUD:(NSString *)title isDim:(BOOL)isDim;
+- (BOOL)showHUD:(NSString *)title isDim:(BOOL)isDim;
 //显示加载完成提示
 - (void)showHUDComplete:(NSString *)title;
 //隐藏加载提示
