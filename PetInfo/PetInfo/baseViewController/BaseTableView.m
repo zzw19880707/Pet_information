@@ -52,8 +52,7 @@
     _refreshHeader=refreshHeader;
     if(_refreshHeader){
         [self addSubview:_refreshHeaderView];
-#warning 修改 待定
-        [_refreshHeaderView release];
+
     }else{
         if([_refreshHeaderView superclass]){
             [_refreshHeaderView removeFromSuperview];
@@ -77,7 +76,7 @@
 #pragma mark ----datasource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return [_data count];
+    return [self.data count];
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     UITableViewCell *cell=[[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil]autorelease];
@@ -106,12 +105,17 @@
 
 -(void)_stopLoadMore{
     if (self.data.count>0) {
+        _moreButton.hidden = NO;
         [_moreButton setTitle:@"上拉加载更多..." forState:UIControlStateNormal];
         _moreButton.enabled=YES;
         UIActivityIndicatorView *activityView=(UIActivityIndicatorView *)[_moreButton viewWithTag:1000];
         [activityView stopAnimating];
-        if(self.isMore!=NO){
-            [_moreButton setTitle:@"加载完成" forState:UIControlStateNormal];
+//        if(self.isMore!=NO){
+//            [_moreButton setTitle:@"加载完成" forState:UIControlStateNormal];
+//        }
+        if (!self.isMore) {
+            [_moreButton setTitle:@"到底啦..." forState:UIControlStateNormal];
+            _moreButton.enabled = NO;
         }
     }else{
         _moreButton.hidden=YES;
@@ -136,6 +140,9 @@
 	[_refreshHeaderView egoRefreshScrollViewDataSourceDidFinishedLoading:self];
 }
 
+- (void)autoRefreshData {
+    [_refreshHeaderView initLoading:self];
+}
 #pragma mark UIScrollViewDelegate Methods
 //监听scrollview  下拉到一定状态。
 //滑动是实时调用

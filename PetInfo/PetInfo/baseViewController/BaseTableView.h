@@ -37,4 +37,6 @@
 @property (nonatomic,assign) id<UItableviewEventDelegate> eventDelegate;
 - (void)doneLoadingTableViewData;
 
+//自动下拉刷新
+- (void)autoRefreshData;
 @end
