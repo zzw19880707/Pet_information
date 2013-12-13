@@ -19,6 +19,9 @@
     //初始化home数据
     NSArray *_data;
     NSArray *_celldata;
+    
+    //用于判断是否 移除并初始化过
+    BOOL _isRemove;
 }
 
 @end

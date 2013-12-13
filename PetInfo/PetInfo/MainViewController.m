@@ -34,6 +34,9 @@
 -(void)_initLocation{
     _longitude = 0;
     _latitude = 0;
+    _isRemove = NO;
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:isLocation];
+
 }
 
 //初始化子控制器
@@ -43,9 +46,12 @@
     CommunityViewController *commu=[[CommunityViewController alloc]init];
     ShopViewController *shop=[[ShopViewController alloc]init];
     MoreViewController *more=[[MoreViewController alloc]init];
-    //为homeview 添加数据源
-    home.cellData = [[NSMutableArray alloc] initWithArray:_celldata];
-    home.array = _data;
+    if (_celldata.count>0&&_data.count>0) {
+        //为homeview 添加数据源
+        home.cellArray = _celldata;
+        home.array = _data;
+    }
+    
     
     NSArray *views=@[hospital,shop,home,commu,more];
     NSMutableArray *viewControllers=[NSMutableArray arrayWithCapacity:5];
@@ -157,23 +163,25 @@
 }
 
 -(void)viewDidEnd{
-    _data = nil;
-    _celldata = nil;
-    //停止网络访问
-    [request clearDelegatesAndCancel];
+
     [self RemoveandInit];
+
 }
 //移除背景大图，并初始化视图
 -(void)RemoveandInit {
-    [UIApplication sharedApplication].statusBarHidden = NO;
+    if (_isRemove) {
+        
+    }else{
+        [UIApplication sharedApplication].statusBarHidden = NO;
+        //初始化子控制器
+        [self _initController];
+        [self _initTabbarView];
+        [_backgroundView removeFromSuperview];
+        _isRemove = YES;
+        //    移除消息 call
+        [[NSNotificationCenter defaultCenter ]removeObserver:self name:isLoadHomeData object:nil];
 
-    //初始化子控制器
-    [self _initController];
-    [self _initTabbarView];
-    [_backgroundView removeFromSuperview];
-
-//    移除消息 call
-    [[NSNotificationCenter defaultCenter ]removeObserver:self name:isLoadHomeData object:nil];
+    }
 }
 //判断当前的网络是3g还是wifi
 -(NSString*)GetCurrntNet
@@ -198,7 +206,8 @@
 }
 
 //定位
--(void)Location {
+-(void)Location
+{
     //开启定位服务
     if([CLLocationManager locationServicesEnabled]){
         CLLocationManager *locationManager = [[CLLocationManager alloc] init];
@@ -219,7 +228,10 @@
 #pragma mark - CLLocationManager delegate
 - (void)locationManager:(CLLocationManager *)manager
 	didUpdateToLocation:(CLLocation *)newLocation
-		   fromLocation:(CLLocation *)oldLocation {
+		   fromLocation:(CLLocation *)oldLocation
+{
+
+
     [manager stopUpdatingLocation];
     _longitude = newLocation.coordinate.longitude;
     _latitude = newLocation.coordinate.latitude;
@@ -227,6 +239,24 @@
     [userDefaults setFloat:_longitude forKey:user_longitude];
     [userDefaults setFloat:_latitude forKey:user_latitude];
     [userDefaults setBool:YES forKey:isLocation];
+    
+    NSMutableDictionary *params;
+    int self_user_id =[userDefaults integerForKey:user_id];
+    if ( self_user_id) {
+        params =[NSMutableDictionary dictionaryWithObjects:
+                 @[[NSNumber numberWithFloat:_longitude],
+                   [NSNumber numberWithFloat:_latitude],
+                   [NSNumber numberWithInt:self_user_id]]
+                        forKeys:@[@"longtitude",@"latitude",@"user_id"]];
+    }else{
+        params=nil;
+    }
+    [DataService requestWithURL:HomeLogin andparams:params andhttpMethod:@"GET" completeBlock:^(id result) {
+        
+    } andErrorBlock:^(NSError *error) {
+        
+    }];
+
 }
 
 - (void)locationManager:(CLLocationManager *)manager
@@ -234,22 +264,40 @@
 {
     _po([error localizedDescription]);
     [manager stopUpdatingLocation];
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setBool:NO forKey:isLocation];
 }
 
 #pragma mark asirequest delegate
--(void)requestFinished:(id)result{
+-(void)requestFinished:(id)result
+{
     _data = [result objectForKey:@"data"];
     _celldata = [result objectForKey:@"celldata"];
     //重复写入文件中
     NSString *path =[[NSBundle mainBundle]pathForResource:@"HomeCellData" ofType:@"plist"];
-    [result writeToFile:path atomically:NO encoding:NSUTF8StringEncoding error:nil];
+//    [result writeToFile:path atomically:NO encoding:NSUTF8StringEncoding error:nil];
+    NSMutableDictionary * dic =[[NSMutableDictionary alloc] initWithContentsOfFile:path];
+    
+    
+    //获取应用程序沙盒的Documents目录
+    NSArray *paths=NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES);
+    NSString *plistPath1 = [paths objectAtIndex:0];
+    NSString *pathName = [plistPath1 stringByAppendingPathComponent:@"HomeCellData.plist"];
+    
+    [dic setObject:_data forKey:@"data"];
+    [dic setObject:_celldata forKey:@"celldata"];
+    [dic writeToFile:pathName atomically:YES];
     //定位结束，发送通知
     [[NSNotificationCenter defaultCenter]postNotificationName:isLoadHomeData object:nil];
 }
-
+-(void)requestFailed:(ASIHTTPRequest *)request
+{
+    _po([[request error] localizedDescription]);
+}
 
 #pragma mark 按钮事件
--(void)selectedTab:(UIButton *)button {
+-(void)selectedTab:(UIButton *)button
+{
     button.selected=YES;
     if (self.selectedIndex !=(button.tag-100)) {
         //设置选中的按钮----->未选中状态
@@ -270,10 +318,13 @@
     self.selectedIndex = button.tag-100;
 }
 
+
 #pragma mark 内存管理
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
 }
-
+-(void)dealloc{
+    [super dealloc];
+}
 @end
