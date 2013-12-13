@@ -35,6 +35,7 @@
     _longitude = 0;
     _latitude = 0;
     _isRemove = NO;
+    _isFinish = NO;
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:isLocation];
 
 }
@@ -51,7 +52,7 @@
         home.cellArray = _celldata;
         home.array = _data;
     }
-    
+    home.isMainFinish = _isFinish;
     
     NSArray *views=@[hospital,shop,home,commu,more];
     NSMutableArray *viewControllers=[NSMutableArray arrayWithCapacity:5];
@@ -116,6 +117,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    NSUserDefaults *userDefaults=[NSUserDefaults standardUserDefaults];
     [UIApplication sharedApplication].statusBarHidden = YES;
     //判断是有有网络
     NSString *net =[self GetCurrntNet];
@@ -135,7 +137,8 @@
         dataService.eventDelegate = self;
         NSMutableDictionary *params;
         [self Location];
-        NSInteger self_user_id =[[NSUserDefaults standardUserDefaults]integerForKey:user_id];
+
+        NSInteger self_user_id =[userDefaults integerForKey:user_id];
         if (self_user_id ==0) {
             params =nil;
         }else{
@@ -143,27 +146,32 @@
         }
         request =[dataService requestWithURL:GetAOImg andparams:params andhttpMethod:@"GET"];
     }
-    //图片最多加载5秒
-    [self performSelector:@selector(viewDidEnd) withObject:nil afterDelay:5];
     
-    UIImage *backImage= [[UIImage imageNamed:@"app_icon.png"] autorelease];
+    UIImage *backImage= [[UIImage imageNamed:@"Main_Background.JPG"] autorelease];
     _backgroundView =[[UIImageView alloc]initWithImage:backImage];
     
     [self.view  addSubview: _backgroundView];
-    NSUserDefaults *userDefaults=[NSUserDefaults standardUserDefaults];
     //第一次登陆
-    if (![userDefaults boolForKey:isFirstLogin]) {
+    if (![userDefaults boolForKey:isNotFirstLogin]) {
 #warning 推送绑定
         [BPush bindChannel];
-        [userDefaults setBool:YES forKey:isFirstLogin];
+        [userDefaults setBool:YES forKey:isNotFirstLogin];
+    }else{
+        //图片最多加载5秒
+        [self performSelector:@selector(viewDidEnd) withObject:nil afterDelay:5];
     }
     self.view.backgroundColor=PetBackgroundColor;
     //定位
     [self Location];
 }
-
+//图片最多加载5秒 否则强行关闭
 -(void)viewDidEnd{
-
+//        读plist文件
+    NSString *path = [[NSBundle mainBundle]pathForResource:@"HomeCellData" ofType:@"plist"];
+    NSDictionary *dic = [[NSDictionary alloc]initWithContentsOfFile:path];
+    _data=[dic objectForKey:@"data"];
+    _celldata = [dic objectForKey:@"celldata"];
+    _isFinish = NO;
     [self RemoveandInit];
 
 }
@@ -204,7 +212,6 @@
     }
     return result;
 }
-
 //定位
 -(void)Location
 {
@@ -287,12 +294,19 @@
     [dic setObject:_data forKey:@"data"];
     [dic setObject:_celldata forKey:@"celldata"];
     [dic writeToFile:pathName atomically:YES];
+    //访问网络完成
+    _isFinish = YES;
     //定位结束，发送通知
     [[NSNotificationCenter defaultCenter]postNotificationName:isLoadHomeData object:nil];
 }
--(void)requestFailed:(ASIHTTPRequest *)request
+-(void)requestFailed:(ASIHTTPRequest *)asirequest
 {
-    _po([[request error] localizedDescription]);
+    _po([[asirequest error] localizedDescription]);
+    NSUserDefaults *userDefaults=[NSUserDefaults standardUserDefaults];
+    if (![userDefaults boolForKey:isNotFirstLogin]) {
+        alertContent([[asirequest error] localizedDescription]);
+        [self RemoveandInit];
+    }
 }
 
 #pragma mark 按钮事件
