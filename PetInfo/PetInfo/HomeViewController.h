@@ -27,4 +27,6 @@
 //tableview数据源
 @property (retain,nonatomic) __block NSArray *array;
 @property (retain,nonatomic) __block NSMutableArray *cellData;
+//用于接收mainview 的数据
+@property (retain,nonatomic) NSArray *cellArray;
 @end

@@ -75,36 +75,12 @@
     ASVBGImage.image=[UIImage imageNamed:@"ao_background.png"];
     [ASVBGView addSubview:ASVBGImage];
     [ASVBGImage release];
-    
-    NSMutableDictionary *params;
-    [self Location];
-    if (_user_id ==0) {
-        params =nil;
-    }else{
-        
-        params=[NSMutableDictionary dictionaryWithObjects:@[[NSNumber numberWithInteger:_user_id]] forKeys:@[@"user_id"]];
-    }
-    //加载网络，获取图片地址和title
-    [DataService requestWithURL:GetAOImg andparams:params andhttpMethod:@"GET" completeBlock:^(id result) {
-        //获取滚动条数据
-        self.array=[result objectForKey:@"data"];
-        for (int i = 0; i<self.array.count; i++) {
-            NSDictionary *dic=self.array[i];
-            [arr addObject:[dic objectForKey:@"imageurl"]];
-            [strArr addObject:[NSString stringWithFormat:@"  【%@】\n%@\n%@",[dic objectForKey:@"category"],[dic objectForKey:@"title"],[dic objectForKey:@"content"]]];
-        }
-        
-        NSArray *array =[result objectForKey:@"celldata"];
-//        self.cellData=[NSMutableArray arrayWithArray:array];
-//        if ([self.cellData count]==0) {
-//            [self.tableView setHidden:YES];
-//            [self.label setHidden:NO];
-//        }else{
-//            self.tableView.height=[self.cellData count]*80+10;
-//            [self.tableView reloadData];
-//        }
-        self.cellData =[[NSMutableArray alloc]init];
-        for (NSDictionary *dic in array) {
+    [self.scrollView addSubview:ASVBGView];
+    [ASVBGView release];
+    //首页加载数据成功
+    if (self.cellArray.count>0&&self.array.count>0) {
+        self.cellData = [[NSMutableArray alloc]init];
+        for (NSDictionary *dic in self.cellArray) {
             ImageWallModel *model = [[ImageWallModel alloc]initWithDataDic:dic];
             [self.cellData addObject:model];
             [model release];
@@ -112,26 +88,85 @@
         if (self.cellData.count ==0) {
             [self.tableView setHidden:YES];
             [self.label setHidden:NO];
-
         }
         self.tableView.height=[self.cellData count]*80+10;
         [self.tableView reloadData];
-        // 初始化自定义ScrollView类对象
+        
+        
+        for (int i = 0; i<self.array.count; i++) {
+            NSDictionary *dic=self.array[i];
+            [arr addObject:[dic objectForKey:@"imageurl"]];
+            [strArr addObject:[NSString stringWithFormat:@"  【%@】\n%@\n%@",[dic objectForKey:@"category"],[dic objectForKey:@"title"],[dic objectForKey:@"content"]]];
+        }
+
         AOScrollerView *aSV = [[AOScrollerView alloc]initWithNameArr:arr titleArr:strArr height:119];
         //设置委托
         aSV.vDelegate=self;
         //添加进view
         [ASVBGView addSubview:aSV];
         [aSV release];
+    }else{
+        NSMutableDictionary *params;
         
-    } andErrorBlock:^(NSError *error) {
+        if (_user_id ==0) {
+            params =nil;
+        }else{
+            
+            params=[NSMutableDictionary dictionaryWithObjects:@[[NSNumber numberWithInteger:_user_id]] forKeys:@[@"user_id"]];
+        }
+        //加载网络，获取图片地址和title
+        [DataService requestWithURL:GetAOImg andparams:params andhttpMethod:@"GET" completeBlock:^(id result) {
+            //获取滚动条数据
+            self.array=[result objectForKey:@"data"];
+            for (int i = 0; i<self.array.count; i++) {
+                NSDictionary *dic=self.array[i];
+                [arr addObject:[dic objectForKey:@"imageurl"]];
+                [strArr addObject:[NSString stringWithFormat:@"  【%@】\n%@\n%@",[dic objectForKey:@"category"],[dic objectForKey:@"title"],[dic objectForKey:@"content"]]];
+            }
+            
+            NSArray *array =[result objectForKey:@"celldata"];
+            //        用于隐藏tableview
+            //        self.cellData=[NSMutableArray arrayWithArray:array];
+            //        if ([self.cellData count]==0) {
+            //            [self.tableView setHidden:YES];
+            //            [self.label setHidden:NO];
+            //        }else{
+            //            self.tableView.height=[self.cellData count]*80+10;
+            //            [self.tableView reloadData];
+            //        }
+            
+            self.cellData =[[NSMutableArray alloc]init];
+            for (NSDictionary *dic in array) {
+                ImageWallModel *model = [[ImageWallModel alloc]initWithDataDic:dic];
+                [self.cellData addObject:model];
+                [model release];
+            }
+            if (self.cellData.count ==0) {
+                [self.tableView setHidden:YES];
+                [self.label setHidden:NO];
+            }
+            self.tableView.height=[self.cellData count]*80+10;
+            [self.tableView reloadData];
+            // 初始化自定义ScrollView类对象
+            AOScrollerView *aSV = [[AOScrollerView alloc]initWithNameArr:arr titleArr:strArr height:119];
+            //设置委托
+            aSV.vDelegate=self;
+            //添加进view
+            [ASVBGView addSubview:aSV];
+            [aSV release];
+            
+        } andErrorBlock:^(NSError *error) {
+            _po([error localizedDescription]);
 #warning 
-    }];
-    [self.scrollView addSubview:ASVBGView];
-    [ASVBGView release];
+        }];
+
+    }
+    
+    
     
     
 }
+
 
 #pragma mark UITableViewDelegate
 - (float)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -260,15 +295,7 @@
     [self.view.window addSubview:_fullImageView];
     
 }
-#pragma mark 方法
-//定位
--(void)Location {
-    CLLocationManager *locationManager = [[CLLocationManager alloc] init];
-    locationManager.delegate = self;
-    //精度10米
-    [locationManager setDesiredAccuracy:kCLLocationAccuracyNearestTenMeters];
-    [locationManager startUpdatingLocation];
-}
+
 
 #pragma mark -FullImageViewDelegate
 - (void) presentModalViewController {
@@ -283,28 +310,7 @@
 - (void) releaseFullView {
     RELEASE_SAFELY(_fullImageView);
 }
-#pragma mark - CLLocationManager delegate
-- (void)locationManager:(CLLocationManager *)manager
-	didUpdateToLocation:(CLLocation *)newLocation
-		   fromLocation:(CLLocation *)oldLocation {
-    
-    [manager stopUpdatingLocation];
-    
-//    _longitude = newLocation.coordinate.longitude;
-//    _latitude = newLocation.coordinate.latitude;
-    NSMutableDictionary *params;
-    if (_user_id ) {
-//        params =[NSMutableDictionary dictionaryWithObjects:@[[NSNumber numberWithFloat:_longitude],[NSNumber numberWithFloat:_latitude]] forKeys:@[@"longtitude",@"latitude"]];
-    }else{
-        params=nil;
-    }
-    [DataService requestWithURL:HomeLogin andparams:params andhttpMethod:@"GET" completeBlock:^(id result) {
-        
-    } andErrorBlock:^(NSError *error) {
-        
-    }];
 
-}
 #pragma mark 内存管理
 - (void)dealloc {
     RELEASE_SAFELY(_scrollView);
