@@ -25,8 +25,10 @@
 - (IBAction)moreAction:(id)sender;
 
 //tableview数据源
-@property (retain,nonatomic) __block NSArray *array;
-@property (retain,nonatomic) __block NSMutableArray *cellData;
+@property (retain,nonatomic) NSArray *array;//用于加载滚动条数据
+@property (retain,nonatomic) NSMutableArray *cellData;//存放model数据
 //用于接收mainview 的数据
 @property (retain,nonatomic) NSArray *cellArray;
+//用于判断mainView是否加载完网络
+@property (assign,nonatomic) BOOL isMainFinish;
 @end

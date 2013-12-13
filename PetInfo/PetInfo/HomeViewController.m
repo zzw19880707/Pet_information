@@ -58,8 +58,8 @@
     
     
     [self _initAOView];
-
-     
+    [self _initTabelData];
+    [self _loadAndWriteData];
 }
 
 //初始化AOScroller
@@ -77,28 +77,13 @@
     [ASVBGImage release];
     [self.scrollView addSubview:ASVBGView];
     [ASVBGView release];
-    //首页加载数据成功
-    if (self.cellArray.count>0&&self.array.count>0) {
-        self.cellData = [[NSMutableArray alloc]init];
-        for (NSDictionary *dic in self.cellArray) {
-            ImageWallModel *model = [[ImageWallModel alloc]initWithDataDic:dic];
-            [self.cellData addObject:model];
-            [model release];
-        }
-        if (self.cellData.count ==0) {
-            [self.tableView setHidden:YES];
-            [self.label setHidden:NO];
-        }
-        self.tableView.height=[self.cellData count]*80+10;
-        [self.tableView reloadData];
-        
-        
-        for (int i = 0; i<self.array.count; i++) {
-            NSDictionary *dic=self.array[i];
-            [arr addObject:[dic objectForKey:@"imageurl"]];
-            [strArr addObject:[NSString stringWithFormat:@"  【%@】\n%@\n%@",[dic objectForKey:@"category"],[dic objectForKey:@"title"],[dic objectForKey:@"content"]]];
-        }
-
+    for (int i = 0; i<self.array.count; i++) {
+        NSDictionary *dic=self.array[i];
+        [arr addObject:[dic objectForKey:@"imageurl"]];
+        [strArr addObject:[NSString stringWithFormat:@"  【%@】\n%@\n%@",[dic objectForKey:@"category"],[dic objectForKey:@"title"],[dic objectForKey:@"content"]]];
+    }
+    //数据大于0才添加，否则下面ui上移
+    if (self.array.count>0) {
         AOScrollerView *aSV = [[AOScrollerView alloc]initWithNameArr:arr titleArr:strArr height:119];
         //设置委托
         aSV.vDelegate=self;
@@ -106,67 +91,60 @@
         [ASVBGView addSubview:aSV];
         [aSV release];
     }else{
-        NSMutableDictionary *params;
         
-        if (_user_id ==0) {
-            params =nil;
-        }else{
-            
-            params=[NSMutableDictionary dictionaryWithObjects:@[[NSNumber numberWithInteger:_user_id]] forKeys:@[@"user_id"]];
-        }
-        //加载网络，获取图片地址和title
-        [DataService requestWithURL:GetAOImg andparams:params andhttpMethod:@"GET" completeBlock:^(id result) {
-            //获取滚动条数据
-            self.array=[result objectForKey:@"data"];
-            for (int i = 0; i<self.array.count; i++) {
-                NSDictionary *dic=self.array[i];
-                [arr addObject:[dic objectForKey:@"imageurl"]];
-                [strArr addObject:[NSString stringWithFormat:@"  【%@】\n%@\n%@",[dic objectForKey:@"category"],[dic objectForKey:@"title"],[dic objectForKey:@"content"]]];
-            }
-            
-            NSArray *array =[result objectForKey:@"celldata"];
-            //        用于隐藏tableview
-            //        self.cellData=[NSMutableArray arrayWithArray:array];
-            //        if ([self.cellData count]==0) {
-            //            [self.tableView setHidden:YES];
-            //            [self.label setHidden:NO];
-            //        }else{
-            //            self.tableView.height=[self.cellData count]*80+10;
-            //            [self.tableView reloadData];
-            //        }
-            
-            self.cellData =[[NSMutableArray alloc]init];
-            for (NSDictionary *dic in array) {
-                ImageWallModel *model = [[ImageWallModel alloc]initWithDataDic:dic];
-                [self.cellData addObject:model];
-                [model release];
-            }
-            if (self.cellData.count ==0) {
-                [self.tableView setHidden:YES];
-                [self.label setHidden:NO];
-            }
-            self.tableView.height=[self.cellData count]*80+10;
-            [self.tableView reloadData];
-            // 初始化自定义ScrollView类对象
-            AOScrollerView *aSV = [[AOScrollerView alloc]initWithNameArr:arr titleArr:strArr height:119];
-            //设置委托
-            aSV.vDelegate=self;
-            //添加进view
-            [ASVBGView addSubview:aSV];
-            [aSV release];
-            
-        } andErrorBlock:^(NSError *error) {
-            _po([error localizedDescription]);
-#warning 
-        }];
-
     }
-    
-    
-    
-    
 }
-
+-(void)_initTabelData{
+    self.cellData = [[NSMutableArray alloc]init];
+    for (NSDictionary *dic in self.cellArray) {
+        ImageWallModel *model = [[ImageWallModel alloc]initWithDataDic:dic];
+        [self.cellData addObject:model];
+        [model release];
+    }
+    if (self.cellData.count ==0) {
+        [self.tableView setHidden:YES];
+        [self.label setHidden:NO];
+    }else{
+        self.tableView.height=[self.cellData count]*80+10;
+        [self.tableView reloadData];
+    }
+}
+-(void)_loadAndWriteData{
+//mainView数据加载完成
+    if (self.isMainFinish) {
+    }
+//未加载完成,重新刷新tableview,并将celldata和array重写入
+    else{
+//        NSMutableDictionary *params;
+//        if (_user_id ==0) {
+//            params =nil;
+//        }else{
+//            params=[NSMutableDictionary dictionaryWithObjects:@[[NSNumber numberWithInteger:_user_id]] forKeys:@[@"user_id"]];
+//        }
+//        //加载网络，获取图片地址和title
+//        [DataService requestWithURL:GetAOImg andparams:params andhttpMethod:@"GET" completeBlock:^(id result) {
+//            NSArray *array =[result objectForKey:@"celldata"];
+//            self.cellData =[[NSMutableArray alloc]init];
+//            for (NSDictionary *dic in array) {
+//                ImageWallModel *model = [[ImageWallModel alloc]initWithDataDic:dic];
+//                [self.cellData addObject:model];
+//                [model release];
+//            }
+//            if (self.cellData.count ==0) {
+//                [self.tableView setHidden:YES];
+//                [self.label setHidden:NO];
+//            }else {
+//                self.tableView.height=[self.cellData count]*80+10;
+//                [self.tableView reloadData];
+//
+//            }
+//            
+//        } andErrorBlock:^(NSError *error) {
+//            _po([error localizedDescription]);
+//#warning
+//        }];
+    }
+}
 
 #pragma mark UITableViewDelegate
 - (float)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
