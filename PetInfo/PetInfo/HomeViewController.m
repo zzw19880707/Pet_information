@@ -265,12 +265,12 @@
 
 #pragma -
 #pragma mark UITableViewDelegate
-//- (float)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-//    CGSize size=self.scrollView.contentSize;
-//    size.height+=80;
-//    self.scrollView.contentSize=size;
-//    return 80;
-//}
+- (float)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    CGSize size=self.scrollView.contentSize;
+    size.height+=80;
+    self.scrollView.contentSize=size;
+    return 80;
+}
 
 #pragma mark UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
