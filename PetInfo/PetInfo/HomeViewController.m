@@ -45,7 +45,10 @@
     [super viewDidLoad];
     self.scrollView.frame=CGRectMake(0, 0, ScreenWidth, ScreenHeight-10-44-44-15-10);
     self.scrollView.backgroundColor=PetBackgroundColor;
-    self.scrollView.contentSize=CGSizeMake(ScreenWidth, 120+60+60+30);
+    self.scrollView.contentSize=CGSizeMake(ScreenWidth, 120+60+60+30 );
+    self.scrollView.delegate =self;
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
     //添加分享按钮
     UIButton *shareButton = [[UIButton alloc]init];
     shareButton.backgroundColor=PetBackgroundColor;
@@ -55,8 +58,10 @@
     
     UIBarButtonItem *shareitem = [[UIBarButtonItem alloc]initWithCustomView:shareButton];
     self.navigationItem.rightBarButtonItem= [shareitem autorelease];
+
     
-    
+    [self.tableView reloadData];
+    [self _initView];
     [self _initAOView];
     [self _initTabelData];
     [self _loadAndWriteData];
@@ -109,50 +114,163 @@
         [self.tableView reloadData];
     }
 }
+
 -(void)_loadAndWriteData{
-//mainView数据加载完成
+    //mainView数据加载完成
     if (self.isMainFinish) {
     }
-//未加载完成,重新刷新tableview,并将celldata和array重写入
+    //未加载完成,重新刷新tableview,并将celldata和array重写入
     else{
-//        NSMutableDictionary *params;
-//        if (_user_id ==0) {
-//            params =nil;
-//        }else{
-//            params=[NSMutableDictionary dictionaryWithObjects:@[[NSNumber numberWithInteger:_user_id]] forKeys:@[@"user_id"]];
-//        }
-//        //加载网络，获取图片地址和title
-//        [DataService requestWithURL:GetAOImg andparams:params andhttpMethod:@"GET" completeBlock:^(id result) {
-//            NSArray *array =[result objectForKey:@"celldata"];
-//            self.cellData =[[NSMutableArray alloc]init];
-//            for (NSDictionary *dic in array) {
-//                ImageWallModel *model = [[ImageWallModel alloc]initWithDataDic:dic];
-//                [self.cellData addObject:model];
-//                [model release];
-//            }
-//            if (self.cellData.count ==0) {
-//                [self.tableView setHidden:YES];
-//                [self.label setHidden:NO];
-//            }else {
-//                self.tableView.height=[self.cellData count]*80+10;
-//                [self.tableView reloadData];
-//
-//            }
-//            
-//        } andErrorBlock:^(NSError *error) {
-//            _po([error localizedDescription]);
-//#warning
-//        }];
+        [self autoRefreshData];
+        [self loadMoredata];
     }
 }
 
-#pragma mark UITableViewDelegate
-- (float)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    CGSize size=self.scrollView.contentSize;
-    size.height+=80;
-    self.scrollView.contentSize=size;
-    return 80;
+
+-(void)_initView{
+    
+    _refreshHeaderView = [[EGORefreshTableHeaderView_old alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.scrollView.bounds.size.height, self.scrollView.frame.size.width, self.scrollView.bounds.size.height)];
+    _refreshHeaderView.delegate = self;
+    _refreshHeaderView.backgroundColor=[UIColor clearColor];
+    [self.scrollView addSubview:_refreshHeaderView];
+    
 }
+
+-(void)pullUp:(UITableView *)tableView{
+    //加载数据
+    NSMutableDictionary *params;
+    if (_user_id ==0) {
+        params =nil;
+    }else{
+        params=[NSMutableDictionary dictionaryWithObjects:@[[NSNumber numberWithInteger:_user_id]] forKeys:@[@"user_id"]];
+    }
+    
+    DataService *dataService =[[DataService alloc]init];
+    dataService.eventDelegate = self;
+    [dataService requestWithURL:GetAOImg andparams:params andhttpMethod:@"GET"];
+}
+
+#pragma mark asirequest delegate
+-(void)requestFinished:(id)result
+{
+    NSArray *array =[result objectForKey:@"celldata"];
+    NSString *path =[[NSBundle mainBundle]pathForResource:@"HomeCellData" ofType:@"plist"];
+    NSMutableDictionary * dic =[[NSMutableDictionary alloc] initWithContentsOfFile:path];
+    //获取应用程序沙盒的Documents目录
+    NSArray *paths=NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES);
+    NSString *plistPath1 = [paths objectAtIndex:0];
+    NSString *pathName = [plistPath1 stringByAppendingPathComponent:@"HomeCellData.plist"];
+    
+    [dic setObject:[result objectForKey:@"data"] forKey:@"data"];
+    [dic setObject:array forKey:@"celldata"];
+    [dic writeToFile:pathName atomically:YES];
+    
+    [self.cellData removeAllObjects];
+    //    self.cellData =[[NSMutableArray alloc]init];
+    for (NSDictionary *dic in array) {
+        ImageWallModel *model = [[ImageWallModel alloc]initWithDataDic:dic];
+        [self.cellData addObject:model];
+        [model release];
+    }
+    if (self.cellData.count ==0) {
+        [self.tableView setHidden:YES];
+        [self.label setHidden:NO];
+    }else {
+        self.tableView.height=[self.cellData count]*80+10;
+//        self.tableView
+//        [self.tableView reloadData];
+//        [self performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [self.tableView reloadData];
+//        });
+        [self performSelector:@selector(reloadData) withObject:nil afterDelay:1];
+    }
+    
+}
+
+-(void)requestFailed:(ASIHTTPRequest *)asirequest
+{
+    _po([[asirequest error] localizedDescription]);
+}
+#pragma mark 上拉获取更多数据
+-(void)loadMoredata{
+    [self pullUp:self.tableView];
+}
+
+
+-(void)reloadData
+{
+    
+    [self doneLoadingTableViewData];
+
+    [self.tableView reloadData];
+
+}
+#pragma mark - 下拉相关的方法
+#pragma mark Data Source Loading / Reloading Methods
+
+- (void)reloadTableViewDataSource{
+	_reloading = YES;
+	
+}
+
+- (void)doneLoadingTableViewData{
+	_reloading = NO;
+	[_refreshHeaderView egoRefreshScrollViewDataSourceDidFinishedLoading:self.scrollView];
+}
+
+- (void)autoRefreshData {
+    [_refreshHeaderView initLoading:self.scrollView];
+}
+#pragma mark UIScrollViewDelegate Methods
+//监听scrollview  下拉到一定状态。
+//滑动是实时调用
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+	
+    if ([scrollView isKindOfClass:[UIScrollView class]]) {
+        [_refreshHeaderView egoRefreshScrollViewDidScroll:scrollView];
+    }
+    
+}
+//拖拽时停止调用
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
+	
+    if ([scrollView isKindOfClass:[UIScrollView class]]) {
+
+        [_refreshHeaderView egoRefreshScrollViewDidEndDragging:scrollView];
+        [self loadMoredata];
+     }
+}
+#pragma mark -
+#pragma mark EGORefreshTableHeaderDelegate Methods
+//下拉到一定距离，手指放开时调用
+- (void)egoRefreshTableHeaderDidTriggerRefresh:(EGORefreshTableHeaderView_old*)view{
+    //设置为正在加载的状态
+	[self reloadTableViewDataSource];
+    
+}
+//当前是否加载
+- (BOOL)egoRefreshTableHeaderDataSourceIsLoading:(EGORefreshTableHeaderView_old*)view{
+	
+	return _reloading;
+}
+
+//取得下拉刷新的时间
+- (NSDate*)egoRefreshTableHeaderDataSourceLastUpdated:(EGORefreshTableHeaderView_old*)view{
+	
+	return [NSDate date];
+	
+}
+
+
+#pragma -
+#pragma mark UITableViewDelegate
+//- (float)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+//    CGSize size=self.scrollView.contentSize;
+//    size.height+=80;
+//    self.scrollView.contentSize=size;
+//    return 80;
+//}
 
 #pragma mark UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -168,7 +286,7 @@
         cell = [[[[NSBundle mainBundle]loadNibNamed:@"EveryCell" owner:self options:nil] lastObject]autorelease];
     }
     UILabel *textLabel=(UILabel *)[cell.contentView viewWithTag:1011];
-    ImageWallModel *model = _cellData[indexPath.row];
+    ImageWallModel *model = self.cellData[indexPath.row];
     textLabel.text = model.des;
     UILabel *countLabel=(UILabel *)[cell.contentView viewWithTag:1013];
     UIButton *imageBtn=(UIButton *)[cell.contentView viewWithTag:1012];
@@ -189,28 +307,29 @@
 #pragma mark 按钮事件
 //更多按钮
 - (IBAction)moreAction:(id)sender{
+
     BasePhotoViewController *basePhoto =[[[BasePhotoViewController alloc]init]autorelease];
 #warning baseurl
-//    basePhoto.baseURL = ;
-//    basePhoto.params;
+    //    basePhoto.baseURL = ;
+    //    basePhoto.params;
     [self.navigationController pushViewController:basePhoto animated:YES];
 }
 //分享 发送按钮
 -(void)shareAction{
-//    if(_user_id==0){
-//        [super alertLoginView];
-//    }else{
-        SendViewController *send=[[SendViewController alloc]init];
-        send.isCancelButton=YES;
-        BaseNavViewController *nav=[[BaseNavViewController alloc]initWithRootViewController:send];
-        [self.navigationController presentViewController:nav animated:YES completion:NULL];
-//    }
+    //    if(_user_id==0){
+    //        [super alertLoginView];
+    //    }else{
+    SendViewController *send=[[SendViewController alloc]init];
+    send.isCancelButton=YES;
+    BaseNavViewController *nav=[[BaseNavViewController alloc]initWithRootViewController:send];
+    [self.navigationController presentViewController:nav animated:YES completion:NULL];
+    //    }
 }
 //中间按钮，根据不同的tag  选择不同的页面
 - (IBAction)btnAction:(UIButton *)sender {
     HomeButtonViewController *homeButtonVC=[[[HomeButtonViewController alloc]init] autorelease];
     BasePhotoViewController *basePhoto =[[[BasePhotoViewController alloc]init]autorelease];
-
+    
     //    homeButtonVC.isBackButton=YES;
     switch (sender.tag) {
         case 1001:
@@ -248,7 +367,7 @@
 -(void)imageButtonAction:(UIButton *)button{
     //点击的cell 位置
     int count = button.tag -1020;
-    ImageWallModel *model =_cellData[count];
+    ImageWallModel *model =self.cellData[count];
     UIImage *imageFull = button.imageView.image;
     //获取按钮位置
     CGPoint point =[button convertPoint:CGPointMake(0, 0) toView:[UIApplication sharedApplication].keyWindow];
@@ -268,7 +387,7 @@
         [UIApplication sharedApplication].statusBarHidden=YES;
         [[_fullImageView viewWithTag:1023]setHidden:NO];
         [[_fullImageView viewWithTag:1024]setHidden:NO];
-
+        
     }];
     [self.view.window addSubview:_fullImageView];
     

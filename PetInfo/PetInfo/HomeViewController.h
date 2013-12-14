@@ -10,13 +10,21 @@
 #import <CoreLocation/CoreLocation.h>
 #import "FullView.h"
 #import "AOScrollerView.h"
-@interface HomeViewController : BaseViewController <ValueClickDelegate,UITableViewDelegate,CLLocationManagerDelegate,UITableViewDataSource,FullImageViewDelegate> {
+#import "EGORefreshTableHeaderView_old.h"
+@interface HomeViewController : BaseViewController <UIScrollViewDelegate,ValueClickDelegate,UITableViewDelegate,CLLocationManagerDelegate,UITableViewDataSource,FullImageViewDelegate,EGORefreshTableHeaderDelegate,ASIRequest> {
 //图片最大化视图
   FullView *_fullImageView;
 //按钮图片位置
     CGRect _frame;
     //登陆用户id 
     NSInteger _user_id;
+    
+    //下拉刷新
+    EGORefreshTableHeaderView_old *_refreshHeaderView;
+    //
+    BOOL _reloading;
+    
+    
 }
 - (IBAction)btnAction:(UIButton *)sender;
 @property (retain, nonatomic) IBOutlet UITableView *tableView;
