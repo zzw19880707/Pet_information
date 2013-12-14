@@ -236,10 +236,15 @@
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
 	
     if ([scrollView isKindOfClass:[UIScrollView class]]) {
-
+        _pf(scrollView.contentOffset.y);
         [_refreshHeaderView egoRefreshScrollViewDidEndDragging:scrollView];
-        [self loadMoredata];
-     }
+        float sub = scrollView.contentSize.height - scrollView.contentOffset.y;
+        if (scrollView.height - sub >30) {
+            [self loadMoredata];
+        }
+        
+        
+    }
 }
 #pragma mark -
 #pragma mark EGORefreshTableHeaderDelegate Methods
