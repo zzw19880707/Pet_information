@@ -35,6 +35,7 @@
         [_fullImageView setHidden: NO];
         [self performSelector:@selector(fullhidden) withObject:nil afterDelay:0.1];
     }
+    [super viewWillAppear:animated];
 }
 -(void)fullhidden{
     [UIApplication sharedApplication].statusBarHidden=YES;
@@ -58,9 +59,7 @@
     
     UIBarButtonItem *shareitem = [[UIBarButtonItem alloc]initWithCustomView:shareButton];
     self.navigationItem.rightBarButtonItem= [shareitem autorelease];
-
     
-    [self.tableView reloadData];
     [self _initView];
     [self _initAOView];
     [self _initTabelData];
