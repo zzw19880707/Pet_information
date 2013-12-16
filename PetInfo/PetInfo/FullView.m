@@ -263,6 +263,7 @@
     [UIApplication sharedApplication].statusBarHidden=NO;
     [UIView animateWithDuration:0.2 animations:^{
         self.frame = _frame;
+        self.alpha = 0;
         [[self viewWithTag:1023]setHidden:YES];
         [[self viewWithTag:1024]setHidden:YES];
     } completion:^(BOOL finished) {
