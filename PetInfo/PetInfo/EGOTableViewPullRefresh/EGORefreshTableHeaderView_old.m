@@ -32,7 +32,7 @@
 
 
 @interface EGORefreshTableHeaderView_old (Private)
-- (void)setState:(EGOPullRefreshState)aState;
+- (void)setState:(EGOPullReadRefreshState)aState;
 @end
 
 @implementation EGORefreshTableHeaderView_old
@@ -91,7 +91,7 @@
 		[view release];
 		
 		
-		[self setState:EGOOPullRefreshNormal];
+		[self setState:EGOOPullReadRefreshNormal];
     }
 	
     return self;
@@ -125,10 +125,10 @@
 
 }
 
-- (void)setState:(EGOPullRefreshState)aState{
+- (void)setState:(EGOPullReadRefreshState)aState{
 	
 	switch (aState) {
-		case EGOOPullRefreshPulling:
+		case EGOOPullReadRefreshPulling:
 			
 			_statusLabel.text = NSLocalizedString(@"松开即可刷新...", @"Release to refresh status");
 			[CATransaction begin];
@@ -137,9 +137,9 @@
 			[CATransaction commit];
 			
 			break;
-		case EGOOPullRefreshNormal:
+		case EGOOPullReadRefreshNormal:
 			
-			if (_state == EGOOPullRefreshPulling) {
+			if (_state == EGOOPullReadRefreshPulling) {
 				[CATransaction begin];
 				[CATransaction setAnimationDuration:FLIP_ANIMATION_DURATION];
 				_arrowImage.transform = CATransform3DIdentity;
@@ -157,7 +157,7 @@
 			[self refreshLastUpdatedDate];
 			
 			break;
-		case EGOOPullRefreshLoading:
+		case EGOOPullReadRefreshLoading:
 			
 			_statusLabel.text = NSLocalizedString(@"载入中...", @"Loading Status");
 			[_activityView startAnimating];
@@ -180,7 +180,7 @@
 
 - (void)egoRefreshScrollViewDidScroll:(UIScrollView *)scrollView {	
 	
-	if (_state == EGOOPullRefreshLoading) {
+	if (_state == EGOOPullReadRefreshLoading) {
 		
 		CGFloat offset = MAX(scrollView.contentOffset.y * -1, 0);
 		offset = MIN(offset, 60);
@@ -193,10 +193,10 @@
 			_loading = [_delegate egoRefreshTableHeaderDataSourceIsLoading:self];
 		}
 		
-		if (_state == EGOOPullRefreshPulling && scrollView.contentOffset.y > -65.0f && scrollView.contentOffset.y < 0.0f && !_loading) {
-			[self setState:EGOOPullRefreshNormal];
-		} else if (_state == EGOOPullRefreshNormal && scrollView.contentOffset.y < -65.0f && !_loading) {
-			[self setState:EGOOPullRefreshPulling];
+		if (_state == EGOOPullReadRefreshPulling && scrollView.contentOffset.y > -65.0f && scrollView.contentOffset.y < 0.0f && !_loading) {
+			[self setState:EGOOPullReadRefreshNormal];
+		} else if (_state == EGOOPullReadRefreshNormal && scrollView.contentOffset.y < -65.0f && !_loading) {
+			[self setState:EGOOPullReadRefreshPulling];
 		}
 		
 		if (scrollView.contentInset.top != 0) {
@@ -220,7 +220,7 @@
 			[_delegate egoRefreshTableHeaderDidTriggerRefresh:self];
 		}
 		
-		[self setState:EGOOPullRefreshLoading];
+		[self setState:EGOOPullReadRefreshLoading];
 		[UIView beginAnimations:nil context:NULL];
 		[UIView setAnimationDuration:0.2];
 		scrollView.contentInset = UIEdgeInsetsMake(60.0f, 0.0f, 0.0f, 0.0f);
@@ -237,18 +237,18 @@
 	[scrollView setContentInset:UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, 0.0f)];
 	[UIView commitAnimations];
 	
-	[self setState:EGOOPullRefreshNormal];
+	[self setState:EGOOPullReadRefreshNormal];
 
 }
 
 //扩展:下拉显示加载
 - (void)initLoading:(UIScrollView *)scrollView {
-//    [UIView beginAnimations:nil context:nil];
-//    [UIView setAnimationDuration:0.3];
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDuration:0.5];
     scrollView.contentInset = UIEdgeInsetsMake(60.0f, 0.0f, 0.0f, 0.0f);
     scrollView.contentOffset = CGPointMake(scrollView.contentOffset.x, -60);
-    [self setState:EGOOPullRefreshLoading];
-//    [UIView commitAnimations];
+    [self setState:EGOOPullReadRefreshLoading];
+    [UIView commitAnimations];
 }
 
 

@@ -28,16 +28,16 @@
 #import <QuartzCore/QuartzCore.h>
 
 typedef enum{
-	EGOOPullRefreshPulling = 0,
-	EGOOPullRefreshNormal,
-	EGOOPullRefreshLoading,	
-} EGOPullRefreshState;
+	EGOOPullReadRefreshPulling = 0,
+	EGOOPullReadRefreshNormal,
+	EGOOPullReadRefreshLoading,
+} EGOPullReadRefreshState;
 
 @protocol EGORefreshTableHeaderDelegate;
 @interface EGORefreshTableHeaderView_old : UIView {
 	
 	id _delegate;
-	EGOPullRefreshState _state;
+	EGOPullReadRefreshState _state;
 
 	UILabel *_lastUpdatedLabel;
 	UILabel *_statusLabel;

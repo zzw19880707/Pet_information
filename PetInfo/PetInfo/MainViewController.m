@@ -42,11 +42,13 @@
 
 //初始化子控制器
 -(void)_initController{
-    HomeViewController *home=[[HomeViewController alloc]init];
-    HospitalViewController *hospital=[[HospitalViewController alloc]init];
-    CommunityViewController *commu=[[CommunityViewController alloc]init];
-    ShopViewController *shop=[[ShopViewController alloc]init];
-    MoreViewController *more=[[MoreViewController alloc]init];
+//    HomeViewController *home=[[HomeViewController alloc]init];
+    HomeViewController *home=[[HomeViewController alloc]initWithNibName:@"HomeViewController" bundle:nil];
+
+    HospitalViewController *hospital=[[[HospitalViewController alloc]init] autorelease];
+    CommunityViewController *commu=[[[CommunityViewController alloc]init] autorelease];
+    ShopViewController *shop=[[[ShopViewController alloc]init] autorelease];
+    MoreViewController *more=[[[MoreViewController alloc]init] autorelease];
     if (_celldata.count>0&&_data.count>0) {
         //为homeview 添加数据源
         home.cellArray = _celldata;
@@ -158,7 +160,7 @@
         [userDefaults setBool:YES forKey:isNotFirstLogin];
     }else{
         //图片最多加载5秒
-        [self performSelector:@selector(viewDidEnd) withObject:nil afterDelay:5];
+        [self performSelector:@selector(viewDidEnd) withObject:nil afterDelay:1];
     }
     self.view.backgroundColor=PetBackgroundColor;
     //定位
@@ -296,7 +298,7 @@
     [dic writeToFile:pathName atomically:YES];
     //访问网络完成
     _isFinish = YES;
-    //定位结束，发送通知
+    //加载完毕，发送通知
     [[NSNotificationCenter defaultCenter]postNotificationName:isLoadHomeData object:nil];
 }
 -(void)requestFailed:(ASIHTTPRequest *)asirequest
@@ -304,7 +306,7 @@
     _po([[asirequest error] localizedDescription]);
     NSUserDefaults *userDefaults=[NSUserDefaults standardUserDefaults];
     if (![userDefaults boolForKey:isNotFirstLogin]) {
-        alertContent([[asirequest error] localizedDescription]);
+//        alertContent([[asirequest error] localizedDescription]);
         [self RemoveandInit];
     }
 }

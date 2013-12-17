@@ -9,7 +9,7 @@
 #ifndef PetInfo_BaseURL_Implements_h
 #define PetInfo_BaseURL_Implements_h
 
-#define BASE_URL @"http://192.168.1.135:8080/petInfo/"
+#define BASE_URL @"http://192.168.1.145:8080/petInfo/"
 //#define BASE_URL @"http://192.168.1.102:8080/petInfo/"
 
 #pragma mark HomeViewController
@@ -75,31 +75,34 @@ params :
  */
 #define MedicineServlet @"MedicineServlet"
 
-//附近列表
-/*
- */
-#define NearServlet @"NearServlet"
-
-//常见病列表
-/*
- */
-#define DiseaseServlet @"DiseaseServlet"
-
 //药品详细列表
 /*
  */
 #define MedicineDetailServlet @"MedicineServlet"
+//药品详细信息
+#define MedicineDetailOneServlet @"MedicineDetailServlet"
+
+//附近列表
+/*
+ */
+#define NearServlet @"NearServlet"
 
 //附近详细列表
 /*
  */
 #define NearDetailServlet @"NearServlet"
 
+//常见病列表
+/*
+ */
+#define DiseaseServlet @"DiseaseServlet"
+
 //常见详细病列表
 /*
  */
 #define DiseaseDetailServlet @"DiseaseServlet"
-
+//常见病单独详细信息
+#define DiseaseDetailOneServlet @"DiseaseDetailServlet"
 
 #pragma mark MoreViewController
 

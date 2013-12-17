@@ -212,7 +212,7 @@
     NSURL *url=[NSURL URLWithString:urlstring];
     ASIFormDataRequest *request=[ASIFormDataRequest requestWithURL:url];
     //设置超时时间
-    [request setTimeOutSeconds:60];
+    [request setTimeOutSeconds:20];
     //设置请求方法
     [request setRequestMethod:httpMethod];
     NSComparisonResult compPost =[httpMethod caseInsensitiveCompare:@"POST"];//忽略大小写比较。返回值是枚举类型的升序、降序、相同

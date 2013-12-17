@@ -11,12 +11,13 @@
 #import "FullView.h"
 #import "AOScrollerView.h"
 #import "EGORefreshTableHeaderView_old.h"
-@interface HomeViewController : BaseViewController <UIScrollViewDelegate,ValueClickDelegate,UITableViewDelegate,CLLocationManagerDelegate,UITableViewDataSource,FullImageViewDelegate,EGORefreshTableHeaderDelegate,ASIRequest> {
-//图片最大化视图
-  FullView *_fullImageView;
-//按钮图片位置
+@interface HomeViewController : BaseViewController <UIScrollViewDelegate,ValueClickDelegate,UITableViewDelegate,UITableViewDataSource,FullImageViewDelegate,EGORefreshTableHeaderDelegate,ASIRequest
+> {
+    //图片最大化视图
+    FullView *_fullImageView;
+    //按钮图片位置
     CGRect _frame;
-    //登陆用户id 
+    //登陆用户id
     NSInteger _user_id;
     
     //下拉刷新
@@ -32,6 +33,8 @@
 @property (retain, nonatomic) IBOutlet UILabel *label;
 - (IBAction)moreAction:(id)sender;
 
+//用于访问网络停止
+//@property (copy,nonatomic) ASIHTTPRequest *request;
 //tableview数据源
 @property (retain,nonatomic) NSArray *array;//用于加载滚动条数据
 @property (retain,nonatomic) NSMutableArray *cellData;//存放model数据

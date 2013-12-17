@@ -15,6 +15,5 @@
 @property (retain, nonatomic) IBOutlet HomeDetailTableView *tableView;
 @property (nonatomic, assign) int index;
 @property (assign,nonatomic) kHomeTableViewCellType homeType;
-@property (assign,nonatomic) NSString *titleText;
-
+@property (retain,nonatomic) NSString *titleText;
 @end

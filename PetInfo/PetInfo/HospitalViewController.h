@@ -8,7 +8,8 @@
 
 #import "BaseViewController.h"
 
-@interface HospitalViewController : BaseViewController
-- (IBAction)test:(id)sender;
-
+@interface HospitalViewController : BaseViewController <UITableViewDelegate,UITableViewDataSource>
+@property (retain, nonatomic) IBOutlet UITableView *tableView;
+@property (retain, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (retain, nonatomic)  NSMutableArray *cellData;
 @end

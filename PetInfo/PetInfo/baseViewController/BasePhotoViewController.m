@@ -273,7 +273,8 @@
 
 }
 -(void)requestFailed:(ASIHTTPRequest *)request{
-    alertContent([[request error] localizedDescription]);
+//    alertContent([[request error] localizedDescription]);
+    _po([[request error]localizedDescription]);
 }
 //加载调用的方法
 -(void)getNextPageView{

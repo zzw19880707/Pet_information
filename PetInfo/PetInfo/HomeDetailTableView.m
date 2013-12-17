@@ -64,8 +64,9 @@
                 }
                 break;
             case kDetailMedicineType://3药品列表
-                cell=[[[NSBundle mainBundle] loadNibNamed:@"HomeDetailCell" owner:self options:nil]lastObject];
+                cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:listIndentifier];
                 break;
+
     
             default:
                 break;
@@ -98,6 +99,7 @@
             }
             break;
         case kDetailMedicineType://3药品列表
+            cell = [self setMedicineCell:cell andIndexPath : indexPath];
             break;
         default:
             break;
@@ -111,7 +113,7 @@
 }
 //常见病cell
 -(UITableViewCell *)setDiseaseCell:(UITableViewCell *)cell andIndexPath:(NSIndexPath *) indexPath{
-    cell.textLabel.text = self.data[indexPath.row];
+    cell.textLabel.text = [self.data[indexPath.row] objectForKey:@"name"];
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     return cell;
 }
@@ -134,8 +136,8 @@
     return cell;
 }
 //药品cell
--(UITableViewCell *)setHomeDetailCell:(UITableViewCell *)cell andIndexPath:(NSIndexPath *) indexPath{
-    cell.textLabel.text = self.data[indexPath.row];
+-(UITableViewCell *)setMedicineCell:(UITableViewCell *)cell andIndexPath:(NSIndexPath *) indexPath{
+    cell.textLabel.text = [self.data[indexPath.row] objectForKey:@"name"];
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     return cell;
 }

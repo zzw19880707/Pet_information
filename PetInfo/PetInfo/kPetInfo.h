@@ -16,7 +16,7 @@
 
 #pragma mark UserDefaults
 //判断是否是第一次登陆
-#define isFirstLogin @"isFirstLogin"
+#define isNotFirstLogin @"isFirstLogin"
 //百度推送绑定信息
 #define BPushchannelid @"BPushchannelid"
 #define BPushappid @"BPushappid"
