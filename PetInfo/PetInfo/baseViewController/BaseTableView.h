@@ -29,6 +29,7 @@
     
     UIButton *_moreButton;
 }
+//data为空时，不显示下拉
 @property(nonatomic,retain)NSArray *data;//为tabelView提供数据
 
 @property (nonatomic,assign)BOOL refreshHeader;//是否需要下拉
