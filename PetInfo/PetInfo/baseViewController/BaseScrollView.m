@@ -40,6 +40,8 @@
         _buttonBgView.backgroundColor = PetBackgroundColor;
         _buttonBgView.contentSize =CGSizeMake( 70*buttons.count, 40);
         _buttonBgView.showsHorizontalScrollIndicator = NO;
+        _buttonBgView.showsVerticalScrollIndicator = NO;
+
         _buttonBgView.tag =10000;
         for (int i = 0; i<buttons.count ; i++) {
             UIButton *button = (UIButton *)buttons[i];

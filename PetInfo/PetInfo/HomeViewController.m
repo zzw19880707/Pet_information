@@ -93,12 +93,12 @@
     }
     //数据大于0才添加，否则下面ui上移
     if (self.array.count>0) {
-        AOScrollerView *aSV = [[AOScrollerView alloc]initWithNameArr:arr titleArr:strArr height:119];
+        _aSV = [[AOScrollerView alloc]initWithNameArr:arr titleArr:strArr height:119];
         //设置委托
-        aSV.vDelegate=self;
+        _aSV.vDelegate=self;
         //添加进view
-        [ASVBGView addSubview:aSV];
-        [aSV release];
+        [ASVBGView addSubview:_aSV];
+//        [aSV release];
     }else{
         
     }
@@ -256,6 +256,8 @@
             [self.navigationController pushViewController:basePhoto animated:YES];
             break;
         case 1004:
+            [_aSV reloadData];
+
             //附近
             homeButtonVC.titleText=@"附近";
             homeButtonVC.homeType=kNearType;
@@ -280,8 +282,11 @@
 #pragma mark 上拉获取更多数据
 -(void)loadMoredata{
     [self pullUp:self.tableView];
+   
+    
 }
 -(void)pullUp:(UITableView *)tableView{
+
     //加载数据
     NSMutableDictionary *params;
     if (_user_id ==0) {
@@ -297,7 +302,7 @@
 
 -(void)reloadData
 {
-    
+
     [self doneLoadingTableViewData];
     [self.tableView reloadData];
     

@@ -1,0 +1,29 @@
+//
+//  Prefix header
+//
+//  The contents of this file are implicitly included at the beginning of every source file.
+//
+
+#import <Availability.h>
+
+#ifndef __IPHONE_3_0
+#warning "This project uses features only available in iOS SDK 3.0 and later."
+#endif
+
+#ifdef __OBJC__
+    #import <UIKit/UIKit.h>
+    #import <Foundation/Foundation.h>
+#endif
+
+//导入自定义工具类
+//用于获取视图的各个高度属性
+#import "UIViewExt.h"
+//自定义类目，用于获取子视图的下一个响应者
+#import "UIView+Additions.h"
+//获取设备信息
+#import "WXHLGlobalUICommon.h"
+#import "UtilDefine.h"
+//导入百度推送包
+#import "BPush.h"
+
+#import "Define.h"

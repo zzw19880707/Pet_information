@@ -24,7 +24,7 @@
     EGORefreshTableHeaderView_old *_refreshHeaderView;
     //
     BOOL _reloading;
-    
+    AOScrollerView *_aSV;
     
 }
 - (IBAction)btnAction:(UIButton *)sender;

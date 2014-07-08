@@ -18,19 +18,43 @@
     }
     return self;
 }
+-(void) reloadData{
+    
+    NSArray *array = [imageSV subviews];
+    for (UIView *view  in array) {
+        [view removeFromSuperview];
+    }
+    //添加图片视图
+    for (int i=0; i<[self.imageNameArr count]; i++) {
+        NSString *str = @"";
+        if (i<_titleStrArr.count) {
+            
+            str=[_titleStrArr objectAtIndex:i];
+        }
+        //创建内容对象
+        AOImageView *imageView = [[AOImageView alloc]initWithImageName:[self.imageNameArr objectAtIndex:i] title:str x:WIDTH*i y:0 height:imageSV.frame.size.height];
+        //制定AOView委托
+        imageView.uBdelegate=self;
+        //设置视图标示
+        imageView.tag=i;
+        //添加视图
+        [imageSV addSubview:imageView];
+    }
+
+}
 //自定义实例化方法
 
 -(id)initWithNameArr:(NSMutableArray *)imageArr titleArr:(NSMutableArray *)titleArr height:(float)heightValue{
     self=[super initWithFrame:CGRectMake(0, 0, WIDTH, 416)];
     if (self) {
         page=0;//设置当前页为1
-        
-        imageNameArr = imageArr;
-        titleStrArr=titleArr;
+        self.imageNameArr= imageArr;
+//        _imageNameArr ;
+        self.titleStrArr=titleArr;
         //图片总数
-        int imageCount = [imageNameArr count];
+        int imageCount = [_imageNameArr count];
         //标题总数
-        int titleCount =[titleStrArr count];
+        int titleCount =[_titleStrArr count];
         //初始化scrollView
         imageSV = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, WIDTH, heightValue)];
         //设置sview属性
@@ -49,9 +73,9 @@
         //添加图片视图
         for (int i=0; i<imageCount; i++) {
             NSString *str = @"";
-            if (i<titleStrArr.count) {
+            if (i<_titleStrArr.count) {
                 
-                str=[titleStrArr objectAtIndex:i];
+                str=[_titleStrArr objectAtIndex:i];
             }
             //创建内容对象
             AOImageView *imageView = [[AOImageView alloc]initWithImageName:[imageArr objectAtIndex:i] title:str x:WIDTH*i y:0 height:imageSV.frame.size.height];
@@ -75,7 +99,7 @@
     //修改页码
     if (page == 0) {
         switchDirection = rightDirection;
-    }else if(page == imageNameArr.count-1){
+    }else if(page == _imageNameArr.count-1){
         switchDirection = leftDirection;
     }
     if (switchDirection == rightDirection) {

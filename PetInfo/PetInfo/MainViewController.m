@@ -155,6 +155,11 @@
     [self.view  addSubview: _backgroundView];
     //第一次登陆
     if (![userDefaults boolForKey:isNotFirstLogin]) {
+        NSArray *paths=NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES);
+        NSString *plistPath1 = [paths objectAtIndex:0];
+        NSString *pathName = [plistPath1 stringByAppendingPathComponent:@"HomeCellData.plist"];
+        NSDictionary *dica = [[NSDictionary alloc]init];
+        [dica writeToFile:pathName atomically:YES];
 #warning 推送绑定
         [BPush bindChannel];
         [userDefaults setBool:YES forKey:isNotFirstLogin];
@@ -283,18 +288,21 @@
     _data = [result objectForKey:@"data"];
     _celldata = [result objectForKey:@"celldata"];
     //重复写入文件中
-    NSString *path =[[NSBundle mainBundle]pathForResource:@"HomeCellData" ofType:@"plist"];
+//    NSString *path =[[NSBundle mainBundle]pathForResource:@"HomeCellData" ofType:@"plist"];
 //    [result writeToFile:path atomically:NO encoding:NSUTF8StringEncoding error:nil];
-    NSMutableDictionary * dic =[[NSMutableDictionary alloc] initWithContentsOfFile:path];
     
     
     //获取应用程序沙盒的Documents目录
     NSArray *paths=NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES);
     NSString *plistPath1 = [paths objectAtIndex:0];
     NSString *pathName = [plistPath1 stringByAppendingPathComponent:@"HomeCellData.plist"];
-    
-    [dic setObject:_data forKey:@"data"];
-    [dic setObject:_celldata forKey:@"celldata"];
+
+    NSMutableDictionary * dic =[[NSMutableDictionary alloc] initWithContentsOfFile:pathName];
+
+//    [dic setObject:_data forKey:@"data"];
+//    [dic setObject:_celldata forKey:@"celldata"];
+    [dic setValue:_data forKey:@"data"];
+    [dic setValue:_celldata forKey:@"celldata"];
     [dic writeToFile:pathName atomically:YES];
     //访问网络完成
     _isFinish = YES;

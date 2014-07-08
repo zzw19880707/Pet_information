@@ -154,22 +154,32 @@
 //拖拽时停止调用
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
 	
-	[_refreshHeaderView egoRefreshScrollViewDidEndDragging:scrollView];
+    [_refreshHeaderView egoRefreshScrollViewDidEndDragging:scrollView];
     
     //偏移量
     float offset=scrollView.contentOffset.y;
     float contentHeight=scrollView.contentSize.height;
     NSLog(@"偏移量y:%f",offset);
     NSLog(@"content高度%f",contentHeight);
+    
+    if (offset<0) {
+        return;
+    }
+    if (!self.isMore) {
+        
+        return;
+    }
+    
+    
     //当offset偏移量滑到底部时，差值是scrollView的高度
-    float sub=contentHeight-offset;
-    if(scrollView.height-sub>30){
+    //    float sub=contentHeight-offset;
+    //    if(sub -scrollView.height > 30){
+    if (scrollView.contentOffset.y+(scrollView.frame.size.height) > scrollView.contentSize.height+65  ) {
         if([self.eventDelegate respondsToSelector:@selector(pullUp:)]){
             [self.eventDelegate pullUp:self];
             [self _startLoadMore];
         }
-    }
-}
+    }}
 
 
 #pragma mark -

@@ -106,10 +106,10 @@
     
     
     
-    NSArray *labelArray = @[des,diagnose,symptom,cure,prevent];
-    NSArray *nameArray = @[@"描述",@"诊断",@"症状",@"治疗",@"预防"];
-    [_imageView setImageWithURL:[dic objectForKey:@"pic"]];
-    [self _initBaseScrollView:nameArray andlabelArray:labelArray andHeight:ScreenHeight-120 -10-44-44-15-10];
+//    NSArray *labelArray = @[des,diagnose,symptom,cure,prevent];
+//    NSArray *nameArray = @[@"描述",@"诊断",@"症状",@"治疗",@"预防"];
+//    [_imageView setImageWithURL:[dic objectForKey:@"pic"]];
+//    [self _initBaseScrollView:nameArray andlabelArray:labelArray andHeight:ScreenHeight-120 -10-44-44-15-10];
 }
 -(void)_initBaseScrollView:(NSArray *)nameArray andlabelArray:(NSArray*)labelArray andHeight:(int)height{
     NSMutableArray *arrays = [[NSMutableArray alloc]init];
