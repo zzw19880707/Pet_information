@@ -46,8 +46,19 @@
         [self addSubview:_pageControl];
         
         _curPage = 0;
+
+    //-------------------------add by zzw
+        [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(moveToNextView) userInfo:nil repeats:YES];
+    
     }
     return self;
+}
+//-------------------------add by zzw
+//往下翻一张
+-(void)moveToNextView{
+    [_delegate PageExchange:_curPage];
+    _curPage = [self validPageValue:_curPage+1];
+    [self loadData];
 }
 
 - (void)setDataource:(id<XLCycleScrollViewDatasource>)datasource
