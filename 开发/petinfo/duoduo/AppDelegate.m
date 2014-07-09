@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-
+#import "MainViewController.h"
 
 @implementation AppDelegate
 #pragma mark method
@@ -42,8 +42,8 @@
 
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
+    self.window.rootViewController = [[MainViewController alloc]init];
     [self.window makeKeyAndVisible];
     
     //设置百度推送代理
