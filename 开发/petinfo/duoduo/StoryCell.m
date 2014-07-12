@@ -17,11 +17,25 @@
 }
 -(void)_init{
     _ImageView.layer.masksToBounds = YES;
-    _ImageView.layer.cornerRadius = 50;
+    _ImageView.layer.cornerRadius = 38.5;
 }
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated
-{
-    [super setSelected:selected animated:animated];
+/*
+-(void)drawRect:(CGRect)rect{
+    
+//    [super drawRect:rect];
+    //获取画板
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    CGContextSetStrokeColorWithColor(ctx, [UIColor redColor].CGColor);//线条颜色
+    //设置填充的颜色
+    CGContextSetFillColorWithColor(ctx, [UIColor greenColor].CGColor);
+    CGContextSetLineWidth(ctx, 2.0);
+    CGContextMoveToPoint(ctx, 52, 45);
+    //    52 45 76 76
+    CGContextAddRect(ctx, CGRectMake(52, 45, 76, 76));
+    CGContextStrokePath(ctx);
+    CGContextDrawPath(ctx, kCGPathStroke);
+
 }
+*/
 
 @end
