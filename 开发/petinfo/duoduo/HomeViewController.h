@@ -7,7 +7,12 @@
 //
 
 #import "TenyeaBaseViewController.h"
-
-@interface HomeViewController : TenyeaBaseViewController
-
+#import "XLCycleScrollView.h"
+@interface HomeViewController : TenyeaBaseViewController<XLCycleScrollViewDatasource,XLCycleScrollViewDelegate,UITableViewDataSource,UITableViewDelegate>
+{
+    
+    //轮播图
+    UIPageControl *pageControl;
+    UIView *view;
+}
 @end
