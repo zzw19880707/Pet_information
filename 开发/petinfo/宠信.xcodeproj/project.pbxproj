@@ -71,6 +71,15 @@
 		EB6D3E94196CD12800128DE3 /* UIScrollView+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = EB6D3E8A196CD12800128DE3 /* UIScrollView+Extension.m */; };
 		EB6D3E95196CD12800128DE3 /* UIScrollView+MJRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = EB6D3E8C196CD12800128DE3 /* UIScrollView+MJRefresh.m */; };
 		EB6D3E96196CD12800128DE3 /* UIView+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = EB6D3E8E196CD12800128DE3 /* UIView+Extension.m */; };
+		EB76418A196E5A0900972EED /* MoveButton.m in Sources */ = {isa = PBXBuildFile; fileRef = EB764189196E5A0900972EED /* MoveButton.m */; };
+		EB76419A196E725B00972EED /* story_near@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EB764196196E725B00972EED /* story_near@2x.png */; };
+		EB76419B196E725B00972EED /* story_sentiment@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EB764197196E725B00972EED /* story_sentiment@2x.png */; };
+		EB76419C196E725B00972EED /* story_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EB764198196E725B00972EED /* story_image@2x.png */; };
+		EB76419D196E725B00972EED /* story_star@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EB764199196E725B00972EED /* story_star@2x.png */; };
+		EB7641A1196E733B00972EED /* story_edit@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EB7641A0196E733B00972EED /* story_edit@2x.png */; };
+		EB7641A3196E770100972EED /* home_cell_line.png in Resources */ = {isa = PBXBuildFile; fileRef = EB7641A2196E770100972EED /* home_cell_line.png */; };
+		EB7641A5196E783600972EED /* home_item_date@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EB7641A4196E783600972EED /* home_item_date@2x.png */; };
+		EB7641AA196E807900972EED /* quan.png in Resources */ = {isa = PBXBuildFile; fileRef = EB7641A9196E807900972EED /* quan.png */; };
 		EB8F814718E1175900EED294 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB8F814618E1175900EED294 /* Foundation.framework */; };
 		EB8F814918E1175900EED294 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB8F814818E1175900EED294 /* CoreGraphics.framework */; };
 		EB8F814B18E1175900EED294 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB8F814A18E1175900EED294 /* UIKit.framework */; };
@@ -95,6 +104,10 @@
 		EB8F819D18E14AD800EED294 /* BPushConfig.plist in Resources */ = {isa = PBXBuildFile; fileRef = EB8F819C18E14AD800EED294 /* BPushConfig.plist */; };
 		EB8F81D218E14EC000EED294 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB8F81D118E14EC000EED294 /* Security.framework */; };
 		EB8F81D618E14ED700EED294 /* libz.1.2.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EB8F81D518E14ED700EED294 /* libz.1.2.5.dylib */; };
+		EBC6E6B6196FE2AC0056E817 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EBC6E6B4196FE2AC0056E817 /* LoginViewController.m */; };
+		EBC6E6B7196FE2AC0056E817 /* LoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EBC6E6B5196FE2AC0056E817 /* LoginViewController.xib */; };
+		EBC6E6BB196FE2DB0056E817 /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EBC6E6B9196FE2DB0056E817 /* RegisterViewController.m */; };
+		EBC6E6BC196FE2DB0056E817 /* RegisterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EBC6E6BA196FE2DB0056E817 /* RegisterViewController.xib */; };
 		EBDF7257196BCA4D00B818EF /* nav_background7.png in Resources */ = {isa = PBXBuildFile; fileRef = EBDF7256196BCA4D00B818EF /* nav_background7.png */; };
 /* End PBXBuildFile section */
 
@@ -221,6 +234,16 @@
 		EB6D3E8C196CD12800128DE3 /* UIScrollView+MJRefresh.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+MJRefresh.m"; sourceTree = "<group>"; };
 		EB6D3E8D196CD12800128DE3 /* UIView+Extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Extension.h"; sourceTree = "<group>"; };
 		EB6D3E8E196CD12800128DE3 /* UIView+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Extension.m"; sourceTree = "<group>"; };
+		EB764188196E5A0900972EED /* MoveButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoveButton.h; sourceTree = "<group>"; };
+		EB764189196E5A0900972EED /* MoveButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MoveButton.m; sourceTree = "<group>"; };
+		EB764196196E725B00972EED /* story_near@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "story_near@2x.png"; sourceTree = "<group>"; };
+		EB764197196E725B00972EED /* story_sentiment@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "story_sentiment@2x.png"; sourceTree = "<group>"; };
+		EB764198196E725B00972EED /* story_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "story_image@2x.png"; sourceTree = "<group>"; };
+		EB764199196E725B00972EED /* story_star@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "story_star@2x.png"; sourceTree = "<group>"; };
+		EB7641A0196E733B00972EED /* story_edit@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "story_edit@2x.png"; sourceTree = "<group>"; };
+		EB7641A2196E770100972EED /* home_cell_line.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = home_cell_line.png; sourceTree = "<group>"; };
+		EB7641A4196E783600972EED /* home_item_date@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "home_item_date@2x.png"; sourceTree = "<group>"; };
+		EB7641A9196E807900972EED /* quan.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = quan.png; sourceTree = "<group>"; };
 		EB8F814318E1175900EED294 /* 宠信.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "宠信.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB8F814618E1175900EED294 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		EB8F814818E1175900EED294 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -256,6 +279,12 @@
 		EB8F819C18E14AD800EED294 /* BPushConfig.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = BPushConfig.plist; sourceTree = "<group>"; };
 		EB8F81D118E14EC000EED294 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		EB8F81D518E14ED700EED294 /* libz.1.2.5.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.5.dylib; path = usr/lib/libz.1.2.5.dylib; sourceTree = SDKROOT; };
+		EBC6E6B3196FE2AC0056E817 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
+		EBC6E6B4196FE2AC0056E817 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
+		EBC6E6B5196FE2AC0056E817 /* LoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginViewController.xib; sourceTree = "<group>"; };
+		EBC6E6B8196FE2DB0056E817 /* RegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterViewController.h; sourceTree = "<group>"; };
+		EBC6E6B9196FE2DB0056E817 /* RegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterViewController.m; sourceTree = "<group>"; };
+		EBC6E6BA196FE2DB0056E817 /* RegisterViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RegisterViewController.xib; sourceTree = "<group>"; };
 		EBDF7256196BCA4D00B818EF /* nav_background7.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nav_background7.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -345,6 +374,12 @@
 			children = (
 				EB25A805196B874C00987F0B /* MyViewController.h */,
 				EB25A806196B874C00987F0B /* MyViewController.m */,
+				EBC6E6B3196FE2AC0056E817 /* LoginViewController.h */,
+				EBC6E6B4196FE2AC0056E817 /* LoginViewController.m */,
+				EBC6E6B5196FE2AC0056E817 /* LoginViewController.xib */,
+				EBC6E6B8196FE2DB0056E817 /* RegisterViewController.h */,
+				EBC6E6B9196FE2DB0056E817 /* RegisterViewController.m */,
+				EBC6E6BA196FE2DB0056E817 /* RegisterViewController.xib */,
 			);
 			name = My;
 			sourceTree = "<group>";
@@ -352,6 +387,8 @@
 		EB25A80E196B88AD00987F0B /* Image */ = {
 			isa = PBXGroup;
 			children = (
+				EB7641A6196E783A00972EED /* home */,
+				EB76418B196E702B00972EED /* story */,
 				EBDF7253196BC8C500B818EF /* base */,
 				EB25A80F196B88B400987F0B /* Main */,
 			);
@@ -570,6 +607,28 @@
 			path = MJRefresh;
 			sourceTree = "<group>";
 		};
+		EB76418B196E702B00972EED /* story */ = {
+			isa = PBXGroup;
+			children = (
+				EB764196196E725B00972EED /* story_near@2x.png */,
+				EB764197196E725B00972EED /* story_sentiment@2x.png */,
+				EB764198196E725B00972EED /* story_image@2x.png */,
+				EB764199196E725B00972EED /* story_star@2x.png */,
+				EB7641A0196E733B00972EED /* story_edit@2x.png */,
+			);
+			name = story;
+			sourceTree = "<group>";
+		};
+		EB7641A6196E783A00972EED /* home */ = {
+			isa = PBXGroup;
+			children = (
+				EB7641A4196E783600972EED /* home_item_date@2x.png */,
+				EB7641A2196E770100972EED /* home_cell_line.png */,
+				EB7641A9196E807900972EED /* quan.png */,
+			);
+			name = home;
+			sourceTree = "<group>";
+		};
 		EB8F813A18E1175800EED294 = {
 			isa = PBXGroup;
 			children = (
@@ -712,6 +771,8 @@
 		EBDF724F196BC2CD00B818EF /* TenyeaView */ = {
 			isa = PBXGroup;
 			children = (
+				EB764188196E5A0900972EED /* MoveButton.h */,
+				EB764189196E5A0900972EED /* MoveButton.m */,
 			);
 			name = TenyeaView;
 			sourceTree = "<group>";
@@ -800,19 +861,29 @@
 			buildActionMask = 2147483647;
 			files = (
 				EB25A81B196B88D600987F0B /* main_home_selected@2x.png in Resources */,
+				EBC6E6BC196FE2DB0056E817 /* RegisterViewController.xib in Resources */,
 				EB25A819196B88D600987F0B /* main_story@2x.png in Resources */,
+				EB76419B196E725B00972EED /* story_sentiment@2x.png in Resources */,
 				EB5188AD18E1540E0086BAE6 /* 37x-Checkmark.png in Resources */,
+				EB7641A3196E770100972EED /* home_cell_line.png in Resources */,
 				EB5BB1F1196B9FC90027B590 /* StoryCell.xib in Resources */,
 				EB25A81D196B88D600987F0B /* main_my@2x.png in Resources */,
+				EB76419D196E725B00972EED /* story_star@2x.png in Resources */,
+				EB7641AA196E807900972EED /* quan.png in Resources */,
 				EB8F815118E1175900EED294 /* InfoPlist.strings in Resources */,
+				EB76419A196E725B00972EED /* story_near@2x.png in Resources */,
 				EB25A81A196B88D600987F0B /* main_home@2x.png in Resources */,
 				EB5188AF18E1540E0086BAE6 /* MBProgressHUD.bundle in Resources */,
 				EB25A81E196B88D700987F0B /* main_my_selected@2x.png in Resources */,
 				EB25A818196B88D600987F0B /* main_story_selected@2x.png in Resources */,
+				EBC6E6B7196FE2AC0056E817 /* LoginViewController.xib in Resources */,
 				EB8F815918E1175900EED294 /* Images.xcassets in Resources */,
+				EB7641A5196E783600972EED /* home_item_date@2x.png in Resources */,
 				EB8F819D18E14AD800EED294 /* BPushConfig.plist in Resources */,
 				EBDF7257196BCA4D00B818EF /* nav_background7.png in Resources */,
 				EB25A81C196B88D600987F0B /* main_ask_selected@2x.png in Resources */,
+				EB7641A1196E733B00972EED /* story_edit@2x.png in Resources */,
+				EB76419C196E725B00972EED /* story_image@2x.png in Resources */,
 				EB6D3E8F196CD12800128DE3 /* MJRefresh.bundle in Resources */,
 				EB25A81F196B88D700987F0B /* main_ask@2x.png in Resources */,
 			);
@@ -859,10 +930,12 @@
 				EB51887D18E152400086BAE6 /* SDWebImageManager+MJ.m in Sources */,
 				EB51885118E1522F0086BAE6 /* NSString+URLEncoding.m in Sources */,
 				EB25A807196B874C00987F0B /* MyViewController.m in Sources */,
+				EBC6E6B6196FE2AC0056E817 /* LoginViewController.m in Sources */,
 				EB51888C18E152480086BAE6 /* UIViewExt.m in Sources */,
 				EB51888B18E152480086BAE6 /* UIView+Additions.m in Sources */,
 				EB51887518E152400086BAE6 /* XLCycleScrollView.m in Sources */,
 				EB51887618E152400086BAE6 /* MKAnnotationView+WebCache.m in Sources */,
+				EBC6E6BB196FE2DB0056E817 /* RegisterViewController.m in Sources */,
 				EB51888418E152400086BAE6 /* UIImageView+WebCache.m in Sources */,
 				EB8F818918E1214D00EED294 /* OpenUDID.m in Sources */,
 				EB6D3E91196CD12800128DE3 /* MJRefreshConst.m in Sources */,
@@ -879,6 +952,7 @@
 				EB8F819318E1348100EED294 /* JSONKit.m in Sources */,
 				EB5188A418E1527B0086BAE6 /* FMDatabaseQueue.m in Sources */,
 				EB6D3E93196CD12800128DE3 /* MJRefreshHeaderView.m in Sources */,
+				EB76418A196E5A0900972EED /* MoveButton.m in Sources */,
 				EB8F815318E1175900EED294 /* main.m in Sources */,
 				EB5188A018E1527B0086BAE6 /* FMDatabase+InMemoryOnDiskIO.m in Sources */,
 				EB51888318E152400086BAE6 /* UIImage+WebP.m in Sources */,
