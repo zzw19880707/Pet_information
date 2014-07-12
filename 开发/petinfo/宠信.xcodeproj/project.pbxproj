@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		EB25A7FC196B866A00987F0B /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EB25A7FB196B866A00987F0B /* HomeViewController.m */; };
 		EB25A7FF196B867A00987F0B /* StoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EB25A7FE196B867A00987F0B /* StoryViewController.m */; };
 		EB25A802196B86CD00987F0B /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EB25A801196B86CD00987F0B /* MainViewController.m */; };
 		EB25A807196B874C00987F0B /* MyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EB25A806196B874C00987F0B /* MyViewController.m */; };
@@ -55,6 +54,12 @@
 		EB5188B418E15C840086BAE6 /* TenyeaBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EB5188B318E15C840086BAE6 /* TenyeaBaseViewController.m */; };
 		EB5BB1F0196B9FC90027B590 /* StoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EB5BB1EE196B9FC90027B590 /* StoryCell.m */; };
 		EB5BB1F1196B9FC90027B590 /* StoryCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB5BB1EF196B9FC90027B590 /* StoryCell.xib */; };
+		EB606A601970FA61008F47E8 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EB606A5F1970FA61008F47E8 /* HomeViewController.m */; };
+		EB606A621970FD24008F47E8 /* home_horn.png in Resources */ = {isa = PBXBuildFile; fileRef = EB606A611970FD24008F47E8 /* home_horn.png */; };
+		EB606A641970FD2D008F47E8 /* main_top.png in Resources */ = {isa = PBXBuildFile; fileRef = EB606A631970FD2D008F47E8 /* main_top.png */; };
+		EB606A661970FD36008F47E8 /* main_pedia.png in Resources */ = {isa = PBXBuildFile; fileRef = EB606A651970FD36008F47E8 /* main_pedia.png */; };
+		EB606A681970FD3A008F47E8 /* main_praise.png in Resources */ = {isa = PBXBuildFile; fileRef = EB606A671970FD3A008F47E8 /* main_praise.png */; };
+		EB606A6A1970FF7A008F47E8 /* home_top_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = EB606A691970FF7A008F47E8 /* home_top_bg.png */; };
 		EB6AC0BA18E161EA00B84E34 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EB6AC0B918E161EA00B84E34 /* libsqlite3.dylib */; };
 		EB6AC0EB18E163E200B84E34 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB6AC0EA18E163E200B84E34 /* QuartzCore.framework */; };
 		EB6AC0ED18E1641100B84E34 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB6AC0EC18E1641100B84E34 /* MapKit.framework */; };
@@ -122,8 +127,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		EB25A7FA196B866A00987F0B /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
-		EB25A7FB196B866A00987F0B /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
 		EB25A7FD196B867A00987F0B /* StoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoryViewController.h; sourceTree = "<group>"; };
 		EB25A7FE196B867A00987F0B /* StoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StoryViewController.m; sourceTree = "<group>"; };
 		EB25A800196B86CD00987F0B /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
@@ -209,6 +212,13 @@
 		EB5BB1ED196B9FC90027B590 /* StoryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoryCell.h; sourceTree = "<group>"; };
 		EB5BB1EE196B9FC90027B590 /* StoryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StoryCell.m; sourceTree = "<group>"; };
 		EB5BB1EF196B9FC90027B590 /* StoryCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StoryCell.xib; sourceTree = "<group>"; };
+		EB606A5E1970FA61008F47E8 /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
+		EB606A5F1970FA61008F47E8 /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
+		EB606A611970FD24008F47E8 /* home_horn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = home_horn.png; sourceTree = "<group>"; };
+		EB606A631970FD2D008F47E8 /* main_top.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = main_top.png; sourceTree = "<group>"; };
+		EB606A651970FD36008F47E8 /* main_pedia.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = main_pedia.png; sourceTree = "<group>"; };
+		EB606A671970FD3A008F47E8 /* main_praise.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = main_praise.png; sourceTree = "<group>"; };
+		EB606A691970FF7A008F47E8 /* home_top_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = home_top_bg.png; sourceTree = "<group>"; };
 		EB6AC0B818E160C000B84E34 /* UtilDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UtilDefine.h; sourceTree = "<group>"; };
 		EB6AC0B918E161EA00B84E34 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		EB6AC0EA18E163E200B84E34 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -342,8 +352,8 @@
 		EB25A7F8196B857C00987F0B /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				EB25A7FA196B866A00987F0B /* HomeViewController.h */,
-				EB25A7FB196B866A00987F0B /* HomeViewController.m */,
+				EB606A5E1970FA61008F47E8 /* HomeViewController.h */,
+				EB606A5F1970FA61008F47E8 /* HomeViewController.m */,
 				EB5BB1ED196B9FC90027B590 /* StoryCell.h */,
 				EB5BB1EE196B9FC90027B590 /* StoryCell.m */,
 				EB5BB1EF196B9FC90027B590 /* StoryCell.xib */,
@@ -622,6 +632,11 @@
 		EB7641A6196E783A00972EED /* home */ = {
 			isa = PBXGroup;
 			children = (
+				EB606A691970FF7A008F47E8 /* home_top_bg.png */,
+				EB606A671970FD3A008F47E8 /* main_praise.png */,
+				EB606A651970FD36008F47E8 /* main_pedia.png */,
+				EB606A631970FD2D008F47E8 /* main_top.png */,
+				EB606A611970FD24008F47E8 /* home_horn.png */,
 				EB7641A4196E783600972EED /* home_item_date@2x.png */,
 				EB7641A2196E770100972EED /* home_cell_line.png */,
 				EB7641A9196E807900972EED /* quan.png */,
@@ -865,6 +880,8 @@
 				EB25A819196B88D600987F0B /* main_story@2x.png in Resources */,
 				EB76419B196E725B00972EED /* story_sentiment@2x.png in Resources */,
 				EB5188AD18E1540E0086BAE6 /* 37x-Checkmark.png in Resources */,
+				EB606A621970FD24008F47E8 /* home_horn.png in Resources */,
+				EB606A641970FD2D008F47E8 /* main_top.png in Resources */,
 				EB7641A3196E770100972EED /* home_cell_line.png in Resources */,
 				EB5BB1F1196B9FC90027B590 /* StoryCell.xib in Resources */,
 				EB25A81D196B88D600987F0B /* main_my@2x.png in Resources */,
@@ -873,14 +890,17 @@
 				EB8F815118E1175900EED294 /* InfoPlist.strings in Resources */,
 				EB76419A196E725B00972EED /* story_near@2x.png in Resources */,
 				EB25A81A196B88D600987F0B /* main_home@2x.png in Resources */,
+				EB606A6A1970FF7A008F47E8 /* home_top_bg.png in Resources */,
 				EB5188AF18E1540E0086BAE6 /* MBProgressHUD.bundle in Resources */,
 				EB25A81E196B88D700987F0B /* main_my_selected@2x.png in Resources */,
 				EB25A818196B88D600987F0B /* main_story_selected@2x.png in Resources */,
 				EBC6E6B7196FE2AC0056E817 /* LoginViewController.xib in Resources */,
+				EB606A661970FD36008F47E8 /* main_pedia.png in Resources */,
 				EB8F815918E1175900EED294 /* Images.xcassets in Resources */,
 				EB7641A5196E783600972EED /* home_item_date@2x.png in Resources */,
 				EB8F819D18E14AD800EED294 /* BPushConfig.plist in Resources */,
 				EBDF7257196BCA4D00B818EF /* nav_background7.png in Resources */,
+				EB606A681970FD3A008F47E8 /* main_praise.png in Resources */,
 				EB25A81C196B88D600987F0B /* main_ask_selected@2x.png in Resources */,
 				EB7641A1196E733B00972EED /* story_edit@2x.png in Resources */,
 				EB76419C196E725B00972EED /* story_image@2x.png in Resources */,
@@ -926,8 +946,8 @@
 				EB51887E18E152400086BAE6 /* SDWebImageManager.m in Sources */,
 				EB8F818A18E1214D00EED294 /* Reachability.m in Sources */,
 				EB51889018E1524F0086BAE6 /* WXHLGlobalUICommon.m in Sources */,
-				EB25A7FC196B866A00987F0B /* HomeViewController.m in Sources */,
 				EB51887D18E152400086BAE6 /* SDWebImageManager+MJ.m in Sources */,
+				EB606A601970FA61008F47E8 /* HomeViewController.m in Sources */,
 				EB51885118E1522F0086BAE6 /* NSString+URLEncoding.m in Sources */,
 				EB25A807196B874C00987F0B /* MyViewController.m in Sources */,
 				EBC6E6B6196FE2AC0056E817 /* LoginViewController.m in Sources */,
