@@ -33,12 +33,11 @@
         }
     }
     UIImage *image=[UIImage imageNamed:@"nav_background7.png"];
-//    [image resizableImageWithCapInsets: UIEdgeInsetsMake(0, 0, 10, 60) resizingMode: UIImageResizingModeTile];
-    UIImageView *imageView=[[UIImageView alloc] initWithFrame:CGRectMake(0, -20, 420, 64)];
-    imageView.image=image;
-//    imageView.clipsToBounds = YES;
-//    imageView.contentMode = UIViewContentModeScaleToFill;
-    [self.navigationBar addSubview:imageView];
+//    平铺
+    UIView *bgView = [[UIView alloc]initWithFrame:CGRectMake(0, -20, 320, 64)];
+    bgView.backgroundColor = [UIColor colorWithPatternImage:image];
+    
+    [self.navigationBar addSubview:bgView];
 }
 
 @end
