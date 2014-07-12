@@ -8,6 +8,9 @@
 
 #import "TenyeaBaseViewController.h"
 
-@interface StoryViewController : TenyeaBaseViewController
-
+@interface StoryViewController : TenyeaBaseViewController <UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate>
+{
+    UITableView *_tableView;
+}
+@property (strong,nonatomic) UITableView *tableView;
 @end
