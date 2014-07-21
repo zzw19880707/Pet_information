@@ -8,6 +8,6 @@
 
 #import "TenyeaBaseViewController.h"
 
-@interface AskViewController : TenyeaBaseViewController
+@interface AskViewController : TenyeaBaseViewController <UITableViewDataSource,UITableViewDelegate>
 
 @end
