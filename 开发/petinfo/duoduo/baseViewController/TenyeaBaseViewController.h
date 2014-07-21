@@ -10,4 +10,8 @@
 
 @interface TenyeaBaseViewController : UIViewController
 
+//需要返回按钮
+-(void)needReturnButton;
+//返回事件
+-(void)returnAction;
 @end
