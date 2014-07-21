@@ -10,8 +10,8 @@
 
 @interface MoveButton : UIButton
 {
-    UILabel *_label;
-    UIImageView *_imageView;
+//    UILabel *_label;
+//    UIImageView *_imageView;
     
 //    CGPoint _labelCenter;
     float _label_R;
@@ -26,6 +26,6 @@
 -(void)beginAnimation;
 -(void)endAnimation;
 
-@property (strong,nonatomic,readonly) UILabel *label;
-@property (strong,nonatomic,readonly) UIImageView *imageView;
+@property (strong,nonatomic) UILabel *label;
+@property (strong,nonatomic) UIImageView *logoImageView;
 @end

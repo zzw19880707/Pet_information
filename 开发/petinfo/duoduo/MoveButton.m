@@ -13,20 +13,20 @@
 @implementation MoveButton{
     BOOL isEnd;
 }
-@synthesize imageView = _imageView;
-@synthesize label = _label;
+//@synthesize imageView = _imageView;
+//@synthesize label = _label;
 -(id)initWithFrame:(CGRect)frame LabelText:(NSString *)text ImageView:(NSString *)image{
     self = [super initWithFrame:frame];
     if (self) {
         _label = [[UILabel alloc]init];
-        _imageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:image]];
+        self.logoImageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:image]];
         [self beginFrame];
         _label.text = text;
         _label.font = [UIFont systemFontOfSize:13];
         _label.textAlignment = NSTextAlignmentCenter;
         _label.textColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:1];
         [self addSubview:_label];
-        [self addSubview:_imageView];
+        [self addSubview:self.logoImageView];
         self.layer.masksToBounds = YES;
         self.layer.cornerRadius = 4.5;
         isEnd = NO;
@@ -36,7 +36,7 @@
 //初始化坐标
 -(void)beginFrame{
     _label.frame = CGRectMake(0, 20, self.bounds.size.width, 20);
-    _imageView.frame = CGRectMake(self.bounds.size.width /2 - 10, 0, 20, 20);
+    self.logoImageView.frame = CGRectMake(self.bounds.size.width /2 - 10, 0, 20, 20);
 }
 //开始结束状态动画
 -(void)beginAnimation{
@@ -65,7 +65,7 @@
         //  动画运行完，保留最后动作
         animation_image.removedOnCompletion = NO;
         animation_image.fillMode = kCAFillModeForwards;
-        [_imageView.layer addAnimation:animation_image forKey:@"test"];
+        [self.logoImageView.layer addAnimation:animation_image forKey:@"test"];
         //    _imageView.frame = CGRectMake(0, 10, 20, 20);
         isEnd = YES;
 
@@ -100,7 +100,7 @@
         //  动画运行完，保留最后动作
         animation_image.removedOnCompletion = NO;
         animation_image.fillMode = kCAFillModeForwards;
-        [_imageView.layer addAnimation:animation_image forKey:@"test"];
+        [self.logoImageView.layer addAnimation:animation_image forKey:@"test"];
         //    _imageView.frame = CGRectMake(0, 10, 20, 20);
         isEnd = YES;
     }
