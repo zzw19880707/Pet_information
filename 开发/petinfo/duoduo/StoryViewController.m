@@ -22,7 +22,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = @"宠信" ;
     [self _initView];
     
 }
