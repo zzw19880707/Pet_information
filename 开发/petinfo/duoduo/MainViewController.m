@@ -33,15 +33,21 @@
 //定位
 -(void)Location {
     //开启定位服务
-    if([CLLocationManager locationServicesEnabled]){
-        CLLocationManager *locationManager = [[CLLocationManager alloc] init];
-        locationManager.delegate = self;
-        //设置不筛选，(距离筛选器distanceFilter,下面表示设备至少移动1000米,才通知委托更新）
-        locationManager.distanceFilter = kCLDistanceFilterNone;
-        //精度10米
-        [locationManager setDesiredAccuracy:kCLLocationAccuracyNearestTenMeters];
-        [locationManager startUpdatingLocation];
-    }
+//    if([CLLocationManager locationServicesEnabled]){
+    if ([CLLocationManager locationServicesEnabled] &&([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorized|| [CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined)) {
+            _po(@"开始定位");
+            CLLocationManager *locationManager = [[CLLocationManager alloc] init];
+            locationManager.delegate = self;
+            //设置不筛选，(距离筛选器distanceFilter,下面表示设备至少移动1000米,才通知委托更新）
+            locationManager.distanceFilter = kCLDistanceFilterNone;
+            //精度10米
+            [locationManager setDesiredAccuracy:kCLLocationAccuracyNearestTenMeters];
+            [locationManager startUpdatingLocation];
+        }else{
+            _po(@"出错了");
+        }
+    
+
 }
 
 
