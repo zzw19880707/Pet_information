@@ -11,7 +11,6 @@
 #import "StoryViewController.h"
 #import "AskViewController.h"
 #import "MyViewController.h"
-
 @interface MainViewController ()
 {
     int _tabbar_button_select ;
@@ -27,6 +26,22 @@
     //初始化tabbar
     [self _initTabbarView];
 
+//    定位
+    [self Location];
+}
+#pragma mark Location
+//定位
+-(void)Location {
+    //开启定位服务
+    if([CLLocationManager locationServicesEnabled]){
+        CLLocationManager *locationManager = [[CLLocationManager alloc] init];
+        locationManager.delegate = self;
+        //设置不筛选，(距离筛选器distanceFilter,下面表示设备至少移动1000米,才通知委托更新）
+        locationManager.distanceFilter = kCLDistanceFilterNone;
+        //精度10米
+        [locationManager setDesiredAccuracy:kCLLocationAccuracyNearestTenMeters];
+        [locationManager startUpdatingLocation];
+    }
 }
 
 
@@ -78,7 +93,41 @@
     
 }
 
+#pragma mark -
+#pragma mark CLLocationManagerDelegate
+- (void)locationManager:(CLLocationManager *)manager
+	didUpdateToLocation:(CLLocation *)newLocation
+		   fromLocation:(CLLocation *)oldLocation
+{
+    [manager stopUpdatingLocation];
+    float longitude = newLocation.coordinate.longitude;
+    float latitude = newLocation.coordinate.latitude;
+    NSDictionary *dic = @{@"longitude": [NSNumber numberWithFloat:longitude],@"latitude":[NSNumber numberWithFloat:latitude]};
+    [[NSUserDefaults standardUserDefaults] setObject:dic forKey:UD_Locationnow_DIC];
+    //    获取当前城市名称
+    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+    [geocoder reverseGeocodeLocation:newLocation
+                   completionHandler:^(NSArray *placemarks, NSError *error){
+                       
+                       for (CLPlacemark *place in placemarks) {
+                           NSLog(@"locality,%@",place.locality);               // 市
+                           NSLog(@"subLocality,%@",place.subLocality);         //区
+                           NSLog(@"subThoroughfare,%@",place.subThoroughfare);
+#warning 写入到userdefaults中
+                       }
+                   }];
 
+    
+}
+
+
+- (void)locationManager:(CLLocationManager *)manager
+       didFailWithError:(NSError *)error
+{
+    _po([error localizedDescription]);
+    [manager stopUpdatingLocation];
+    
+}
 #pragma mark -
 #pragma mark 按钮事件
 //tabbar选中事件

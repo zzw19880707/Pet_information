@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "TenyeaBaseNavigationViewController.h"
+#import <CoreLocation/CoreLocation.h>
 
-@interface MainViewController : UITabBarController<UINavigationControllerDelegate>
+@interface MainViewController : UITabBarController<CLLocationManagerDelegate,UINavigationControllerDelegate>
 {
     UIView *_tabbarView;//tabbar
 }
