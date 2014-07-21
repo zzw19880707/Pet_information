@@ -20,7 +20,7 @@
     [self loadBackgroundImage];
 }
 
-
+//顶部navi栏
 -(void)loadBackgroundImage{
     //    去除navigation的横线
     if ([self.navigationBar respondsToSelector:@selector( setBackgroundImage:forBarMetrics:)]){
@@ -36,8 +36,9 @@
 //    平铺
     UIView *bgView = [[UIView alloc]initWithFrame:CGRectMake(0, -20, 320, 64)];
     bgView.backgroundColor = [UIColor colorWithPatternImage:image];
-    
-    [self.navigationBar addSubview:bgView];
+    [self.navigationBar insertSubview:bgView atIndex:0];
+
 }
+
 
 @end
